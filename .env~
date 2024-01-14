@@ -1,8 +1,0 @@
- 'db_host_name' => 'localhost',
-     'db_host_instance' => 'SQLEXPRESS',
-         'db_user_name' => 'suitecrm',
-	     'db_password' => 'crm@Fitech#2023dbHost',
-	         'db_name' => 'suitecrm',MYSQL_HOST=localhost
-MYSQL_USER=your_user
-MYSQL_PASSWORD=your_password
-MYSQL_DB=your_database

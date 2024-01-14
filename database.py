@@ -20,12 +20,15 @@ def connect():
         database=MYSQL_DB
     )
 
-def check_leads_name(name):
+def get_item_by_name(name):
     conn = connect()
     cursor = conn.cursor()
     sql = ("SELECT * FROM leads where last_name = %s")
     cursor.execute(sql, (name,))
     result = cursor.fetchall()
     conn.close()
-    return len(result) > 0
-
+    if len(result) > 0:
+        item = result[0]
+        return item.id
+    else:
+        return -1
