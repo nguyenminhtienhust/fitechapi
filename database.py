@@ -25,10 +25,10 @@ def get_item_by_name(name):
     cursor = conn.cursor()
     sql = ("SELECT * FROM leads where last_name = %s")
     cursor.execute(sql, (name,))
-    result = cursor.fetchall()
+    result = cursor.fetchone()
     conn.close()
-    if len(result) > 0:
-        item = result[0]
-        return item.id
+    if result is None:
+        return ""
     else:
-        return -1
+        print(result)
+        return result[0]

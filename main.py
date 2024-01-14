@@ -23,10 +23,9 @@ async def leads():
 
 @app.post("/leads/check/")
 async def check_leads(item: ItemName):
-    print(item.name)
     item_id = get_item_by_name(item.name)
-    if item_id == -1:
-        return {"data" : -1}
+    if item_id is None:
+        return {"data" : ""}
     else:
         return {"data" : item_id}
 
