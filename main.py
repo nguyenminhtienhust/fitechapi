@@ -1,15 +1,16 @@
-
 from fastapi import FastAPI
 from database import connect
 from fastapi import HTTPException
-from database import get_item_by_name
+from database import get_item_by_name,find_minimum_leads_by_sale
 from pydantic import BaseModel
-
 app = FastAPI()
 
 class ItemName(BaseModel):
     name: str
 
+class ItemCount(BaseModel):
+    user_id: str
+    
 @app.post("/detail/")
 async def item_detail(item: ItemName):
     if get_item_by_name("tiktok"):
@@ -29,3 +30,8 @@ async def check_leads(item: ItemName):
     else:
         return {"data" : item_id}
 
+@app.get("/leads/find-minimum-sale")
+async def find_sale():
+    user_id = find_minimum_leads_by_sale()
+    return {"data" : user_id }
+        

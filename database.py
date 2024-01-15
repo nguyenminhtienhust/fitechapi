@@ -1,4 +1,3 @@
-
 import mysql.connector
 from dotenv import load_dotenv
 import os
@@ -32,3 +31,23 @@ def get_item_by_name(name):
     else:
         print(result)
         return result[0]
+
+def get_all_active_user():
+    conn = connect()
+    cursor = conn.cursor()
+    sql = ("SELECT * FROM users where status = %s")
+
+def find_minimum_leads_by_sale():
+    conn = connect()
+    cursor = conn.cursor()
+    sql = ("select * from users")
+    cursor.execute(sql,(name,))
+    results = cursor.fetchall()
+    for result in results:
+        print(result)
+        user_id = result[0]
+        print(user_id)
+        check_sql = ("select count(*) from leads where assigned_user_id = %s")
+        cursor.execute(check_sql,(user_id,)
+                       #final_count = cursor.fetchone()
+                       #print(final_count)
