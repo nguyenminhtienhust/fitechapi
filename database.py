@@ -29,7 +29,7 @@ def get_item_by_name(name):
     if result is None:
         return ""
     else:
-        print(result)
+        #print(result)
         return result[0]
 
 def get_all_active_user():
@@ -40,14 +40,24 @@ def get_all_active_user():
 def find_minimum_leads_by_sale():
     conn = connect()
     cursor = conn.cursor()
-    sql = ("select * from users")
-    cursor.execute(sql,(name,))
+    sql = ("select * from suitecrm.users where employee_status = 'Active' and department = 'Sales Dept.' and id != '6d14a07c-f8d3-d21a-f31c-6592da7f6c30';")
+    cursor.execute(sql,())
     results = cursor.fetchall()
+    first_result = results[0]
+    min_count = 10000000
+    selected_user_id = results[0][0]
+    
     for result in results:
-        print(result)
         user_id = result[0]
-        print(user_id)
+        #print(user_id)
         check_sql = ("select count(*) from leads where assigned_user_id = %s")
-        cursor.execute(check_sql,(user_id,)
-                       #final_count = cursor.fetchone()
-                       #print(final_count)
+        cursor.execute(check_sql,(user_id,))
+        final_count = cursor.fetchone()
+        #print(final_count[0])
+        if (min_count <= final_count[0]):
+            selected_user_id = user_id
+            min_count = final_count[0]
+        else:
+            continue
+    #print("Selected user id:" + selected_user_id)
+    return selected_user_id

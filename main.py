@@ -34,4 +34,3 @@ async def check_leads(item: ItemName):
 async def find_sale():
     user_id = find_minimum_leads_by_sale()
     return {"data" : user_id }
-        
