@@ -44,9 +44,13 @@ def find_minimum_leads_by_sale():
     cursor.execute(sql,())
     results = cursor.fetchall()
     first_result = results[0]
-    min_count = 10000000
-    selected_user_id = results[0][0]
     
+    selected_user_id = results[0][0]
+    check_sql = ("select count(*) from leads where assigned_user_id = %s")
+    cursor.execute(check_sql,(selected_user_id,))
+    _min_count = cursor.fetchone()
+    min_count = _min_count[0]
+
     for result in results:
         user_id = result[0]
         #print(user_id)
@@ -54,7 +58,7 @@ def find_minimum_leads_by_sale():
         cursor.execute(check_sql,(user_id,))
         final_count = cursor.fetchone()
         #print(final_count[0])
-        if (min_count <= final_count[0]):
+        if (final_count[0] <= min_count):
             selected_user_id = user_id
             min_count = final_count[0]
         else:
