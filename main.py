@@ -1,8 +1,11 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from database import connect
 from fastapi import HTTPException
-from database import get_item_by_name,find_minimum_leads_by_sale
+from database import get_item_by_name,find_minimum_leads_by_sale,get_dashboard
 from pydantic import BaseModel
+from contextlib import asynccontextmanager
+#from psycopg_pool import AsyncConnectionPool
+
 app = FastAPI()
 
 class ItemName(BaseModel):
@@ -34,3 +37,8 @@ async def check_leads(item: ItemName):
 async def find_sale():
     user_id = find_minimum_leads_by_sale()
     return {"data" : user_id }
+
+@app.get("/dashboard")
+async def dashboard():
+    data = get_dashboard()
+    return data

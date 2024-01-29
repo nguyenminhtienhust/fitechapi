@@ -65,3 +65,42 @@ def find_minimum_leads_by_sale():
             continue
     #print("Selected user id:" + selected_user_id)
     return selected_user_id
+
+def get_dashboard():
+    conn = connect()
+    cursor = conn.cursor()
+    sql = ("select * from suitecrm.users where employee_status = 'Active' and id != '6d14a07c-f8d3-d21a-f31c-6592da7f6c30' and is_admin = 'False';")
+    cursor.execute(sql,())
+    sales = cursor.fetchall()
+    sales_list = []
+    total_reach_leads_by_all_sale = 0
+    for sale in sales:
+        detail_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s and status != 'New'")
+        cursor.execute(detail_sql,(sale[0],))
+        results = cursor.fetchone()
+        print(results)
+        full_name = sale[8] + " " + sale[7]
+        detail_dict = {"full_name":full_name}
+        detail_dict["total_reach_leads"] = results[0]
+        total_reach_leads_by_all_sale += results[0]
+        sales_list.append(detail_dict)
+    final_dict = {"sales": sales_list}
+
+    sumary_sql = ("select count(*) from suitecrm.leads")
+    cursor.execute(sumary_sql,())
+    total_leads_result = cursor.fetchone()
+    final_dict["total_leads"] = total_leads_result[0]
+
+    sumary_sql_1 = ("select count(*) from suitecrm.leads where created_by = '6d14a07c-f8d3-d21a-f31c-6592da7f6c30'")
+    cursor.execute(sumary_sql_1,())
+    total_leads_by_hien = cursor.fetchone()
+    final_dict["total_leads_by_hien"] = total_leads_by_hien[0]
+
+
+    sumary_sql_2 = ("select count(*) from suitecrm.leads where created_by = '1'")
+    cursor.execute(sumary_sql_2,())
+    total_leads_by_admin = cursor.fetchone()
+    final_dict["total_leads_by_admin"] = total_leads_by_admin[0]
+    
+    final_dict["total_leads_reach"] = total_reach_leads_by_all_sale
+    return {"data":final_dict}
