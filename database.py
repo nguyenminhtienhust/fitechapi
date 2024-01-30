@@ -73,16 +73,20 @@ def get_dashboard():
     cursor.execute(sql,())
     sales = cursor.fetchall()
     sales_list = []
-    total_reach_leads_by_all_sale = 0
     for sale in sales:
-        detail_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s and status != 'New'")
-        cursor.execute(detail_sql,(sale[0],))
-        results = cursor.fetchone()
-        print(results)
         full_name = sale[8] + " " + sale[7]
         detail_dict = {"full_name":full_name}
-        detail_dict["total_reach_leads"] = results[0]
-        total_reach_leads_by_all_sale += results[0]
+        
+        new_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s and status = 'New'")
+        cursor.execute(new_sql,(sale[0],))
+        results_new = cursor.fetchone()
+        detail_dict["total_new_leads"] = results_new[0]
+
+        assigned_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s and status = 'Assigned'")
+        cursor.execute(assigned_sql,(sale[0],))
+        results_assigned = cursor.fetchone()
+        detail_dict["total_assigned"] = results_assigned[0
+        
         sales_list.append(detail_dict)
     final_dict = {"sales": sales_list}
 
