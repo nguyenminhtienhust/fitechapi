@@ -110,16 +110,39 @@ def get_dashboard():
     total_leads_result = cursor.fetchone()
     final_dict["total_leads"] = total_leads_result[0]
 
-    sumary_sql_1 = ("select count(*) from suitecrm.leads where created_by = '6d14a07c-f8d3-d21a-f31c-6592da7f6c30'")
-    cursor.execute(sumary_sql_1,())
-    total_leads_by_hien = cursor.fetchone()
-    final_dict["total_leads_by_hien"] = total_leads_by_hien[0]
+    supersale_sql = ("select count(*) from suitecrm.leads where created_by = '6d14a07c-f8d3-d21a-f31c-6592da7f6c30'")
+    cursor.execute(supersale_sql,())
+    total_leads_by_supersale = cursor.fetchone()
+    final_dict["total_leads_by_supersale"] = total_leads_by_supersale[0]
 
-
-    sumary_sql_2 = ("select count(*) from suitecrm.leads where created_by = '1'")
-    cursor.execute(sumary_sql_2,())
+    admin_sql = ("select count(*) from suitecrm.leads where created_by = '1'")
+    cursor.execute(admin_sql,())
     total_leads_by_admin = cursor.fetchone()
     final_dict["total_leads_by_admin"] = total_leads_by_admin[0]
-    
-    final_dict["total_leads_reach"] = total_reach_leads_by_all_sale
+
+    new_sql = ("select count(*) from suitecrm.leads where status = 'New'")
+    cursor.execute(new_sql,(sale[0],))
+    results_new = cursor.fetchone()
+    final_dict["total_new_leads"] = results_new[0]
+
+    assigned_sql = ("select count(*) from suitecrm.leads where status = 'Assigned'")
+    cursor.execute(assigned_sql,(sale[0],))
+    results_assigned = cursor.fetchone()
+    final_dict["total_assigned"] = results_assigned[0]
+        
+    inprocess_sql = ("select count(*) from suitecrm.leads where status = 'In Process'")
+    cursor.execute(inprocess_sql,(sale[0],))
+    results_inprocess = cursor.fetchone()
+    final_dict["total_inprocess"] = results_inprocess[0]
+        
+    converted_sql = ("select count(*) from suitecrm.leads where status = 'Converted'")
+    cursor.execute(converted_sql,(sale[0],))
+    results_converted = cursor.fetchone()
+    final_dict["total_converted"] = results_converted[0]
+        
+    recycled_sql = ("select count(*) from suitecrm.leads where status = 'Converted'")
+    cursor.execute(recycled_sql,(sale[0],))
+    results_recycled = cursor.fetchone()
+    final_dict["total_recycled"] = results_recycled[0]
+        
     return {"data":final_dict}
