@@ -121,27 +121,27 @@ def get_dashboard():
     final_dict["total_leads_by_admin"] = total_leads_by_admin[0]
 
     new_sql = ("select count(*) from suitecrm.leads where status = 'New'")
-    cursor.execute(new_sql,(sale[0],))
+    cursor.execute(new_sql,())
     results_new = cursor.fetchone()
     final_dict["total_new_leads"] = results_new[0]
 
     assigned_sql = ("select count(*) from suitecrm.leads where status = 'Assigned'")
-    cursor.execute(assigned_sql,(sale[0],))
+    cursor.execute(assigned_sql,())
     results_assigned = cursor.fetchone()
     final_dict["total_assigned"] = results_assigned[0]
         
     inprocess_sql = ("select count(*) from suitecrm.leads where status = 'In Process'")
-    cursor.execute(inprocess_sql,(sale[0],))
+    cursor.execute(inprocess_sql,())
     results_inprocess = cursor.fetchone()
     final_dict["total_inprocess"] = results_inprocess[0]
         
     converted_sql = ("select count(*) from suitecrm.leads where status = 'Converted'")
-    cursor.execute(converted_sql,(sale[0],))
+    cursor.execute(converted_sql,())
     results_converted = cursor.fetchone()
     final_dict["total_converted"] = results_converted[0]
         
     recycled_sql = ("select count(*) from suitecrm.leads where status = 'Converted'")
-    cursor.execute(recycled_sql,(sale[0],))
+    cursor.execute(recycled_sql,())
     results_recycled = cursor.fetchone()
     final_dict["total_recycled"] = results_recycled[0]
         
