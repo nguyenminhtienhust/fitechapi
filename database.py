@@ -69,7 +69,7 @@ def find_minimum_leads_by_sale():
 def get_dashboard():
     conn = connect()
     cursor = conn.cursor()
-    sql = ("select * from suitecrm.users where employee_status = 'Active' and id != '6d14a07c-f8d3-d21a-f31c-6592da7f6c30' and is_admin = 'False';")
+    sql = ("select * from suitecrm.users where status = 'Active' and id != '6d14a07c-f8d3-d21a-f31c-6592da7f6c30' and is_admin = 'False';")
     cursor.execute(sql,())
     sales = cursor.fetchall()
     sales_list = []
