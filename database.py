@@ -19,6 +19,19 @@ def connect():
         database=MYSQL_DB
     )
 
+def export_all_leads_in_Malaysia():
+    conn = connect()
+    cursor = conn.cursor()
+    sql = ("select * from suitecrm.leads where primary_address_country LIKE 'Malaysia' or primary_address_country LIKE 'Kuala Lumpur' or primary_address_country LIKE 'Penang' or primary_address_street LIKE 'Malaysia' or primary_address_street LIKE 'Kuala Lumpur' or primary_address_street LIKE 'Penang'")
+    cursor.execute(sql, ())
+    result = cursor.fetchall()
+    conn.close()
+    if result is None:
+        return ""
+    else:
+        #print(result)
+        return result
+    
 def get_item_by_name(name):
     conn = connect()
     cursor = conn.cursor()
