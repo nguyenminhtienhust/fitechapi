@@ -89,11 +89,16 @@ def get_dashboard():
     for sale in sales:
         full_name = sale[8] + " " + sale[7]
         detail_dict = {"full_name":full_name}
-        
+
+        total_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s")
+        cursor.execute(total_sql,(sale[0],))                                                                                                                                                               
+        results_total = cursor.fetchone()                                                                                                                                                   
+        detail_dict["total_leads"] = results_total[0]
+
         new_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s and status = 'New'")
         cursor.execute(new_sql,(sale[0],))
         results_new = cursor.fetchone()
-        detail_dict["total_new_leads"] = results_new[0]
+        detail_dict["total_new"] = results_new[0]
 
         assigned_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s and status = 'Assigned'")
         cursor.execute(assigned_sql,(sale[0],))
@@ -110,10 +115,15 @@ def get_dashboard():
         results_converted = cursor.fetchone()
         detail_dict["total_converted"] = results_converted[0]
         
-        recycled_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s and status = 'Converted'")
+        recycled_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s and status = 'Recycled'")
         cursor.execute(recycled_sql,(sale[0],))
         results_recycled = cursor.fetchone()
         detail_dict["total_recycled"] = results_recycled[0]
+        
+        dead_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s and status = 'Dead'")
+        cursor.execute(dead_sql,(sale[0],))
+        results_dead = cursor.fetchone()
+        detail_dict["total_dead"] = results_dead[0]
         
         sales_list.append(detail_dict)
     final_dict = {"sales": sales_list}
@@ -153,9 +163,14 @@ def get_dashboard():
     results_converted = cursor.fetchone()
     final_dict["total_converted"] = results_converted[0]
         
-    recycled_sql = ("select count(*) from suitecrm.leads where status = 'Converted'")
+    recycled_sql = ("select count(*) from suitecrm.leads where status = 'Recycled'")
     cursor.execute(recycled_sql,())
     results_recycled = cursor.fetchone()
     final_dict["total_recycled"] = results_recycled[0]
-        
+    
+    dead_sql = ("select count(*) from suitecrm.leads where status = 'Dead'")
+    cursor.execute(dead_sql,())
+    results_dead = cursor.fetchone()
+    final_dict["total_dead"] = results_dead[0]
+
     return {"data":final_dict}
