@@ -235,14 +235,14 @@ def get_this_month_dashboard():
         
         sales_list.append(detail_dict)
     final_dict = {"sales": sales_list}
-
-    sumary_sql = ("select count(*) from suitecrm.leads and date_modified >= %s and date_modified <= %s")
+    print(final_dict)
+    sumary_sql = ("select count(*) from suitecrm.leads where date_modified >= %s and date_modified <= %s")
     cursor.execute(sumary_sql,(first_date_string,last_date_string))
     total_leads_result = cursor.fetchone()
     final_dict["total_leads"] = total_leads_result[0]
 
     supersale_sql = ("select count(*) from suitecrm.leads where created_by = '6d14a07c-f8d3-d21a-f31c-6592da7f6c30' and date_modified >= %s and date_modified <= %s")
-    cursor.execute(supersale_sql,(first_date_string,last_date_string))
+    cursor.execute(supersale_sql,(first_date_string,last_date_string,))
     total_leads_by_supersale = cursor.fetchone()
     final_dict["total_leads_by_supersale"] = total_leads_by_supersale[0]
 
@@ -251,32 +251,32 @@ def get_this_month_dashboard():
     total_leads_by_admin = cursor.fetchone()
     final_dict["total_leads_by_admin"] = total_leads_by_admin[0]
 
-    new_sql = ("select count(*) from suitecrm.leads where status = 'New' date_modified >= %s and date_modified <= %s")
+    new_sql = ("select count(*) from suitecrm.leads where status = 'New' and date_modified >= %s and date_modified <= %s")
     cursor.execute(new_sql,(first_date_string,last_date_string))
     results_new = cursor.fetchone()
     final_dict["total_new_leads"] = results_new[0]
 
-    assigned_sql = ("select count(*) from suitecrm.leads where status = 'Assigned' date_modified >= %s and date_modified <= %s")
+    assigned_sql = ("select count(*) from suitecrm.leads where status = 'Assigned' and date_modified >= %s and date_modified <= %s")
     cursor.execute(assigned_sql,(first_date_string,last_date_string))
     results_assigned = cursor.fetchone()
     final_dict["total_assigned"] = results_assigned[0]
         
-    inprocess_sql = ("select count(*) from suitecrm.leads where status = 'In Process' date_modified >= %s and date_modified <= %s")
+    inprocess_sql = ("select count(*) from suitecrm.leads where status = 'In Process' and date_modified >= %s and date_modified <= %s")
     cursor.execute(inprocess_sql,(first_date_string,last_date_string))
     results_inprocess = cursor.fetchone()
     final_dict["total_inprocess"] = results_inprocess[0]
         
-    converted_sql = ("select count(*) from suitecrm.leads where status = 'Converted' date_modified >= %s and date_modified <= %s")
+    converted_sql = ("select count(*) from suitecrm.leads where status = 'Converted' and date_modified >= %s and date_modified <= %s")
     cursor.execute(converted_sql,(first_date_string,last_date_string))
     results_converted = cursor.fetchone()
     final_dict["total_converted"] = results_converted[0]
         
-    recycled_sql = ("select count(*) from suitecrm.leads where status = 'Recycled' date_modified >= %s and date_modified <= %s")
+    recycled_sql = ("select count(*) from suitecrm.leads where status = 'Recycled' and date_modified >= %s and date_modified <= %s")
     cursor.execute(recycled_sql,(first_date_string,last_date_string))
     results_recycled = cursor.fetchone()
     final_dict["total_recycled"] = results_recycled[0]
     
-    dead_sql = ("select count(*) from suitecrm.leads where status = 'Dead' date_modified >= %s and date_modified <= %s")
+    dead_sql = ("select count(*) from suitecrm.leads where status = 'Dead' and date_modified >= %s and date_modified <= %s")
     cursor.execute(dead_sql,(first_date_string,last_date_string))
     results_dead = cursor.fetchone()
     final_dict["total_dead"] = results_dead[0]
