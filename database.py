@@ -185,7 +185,7 @@ def get_this_month_dashboard():
     current_year = first_date.year
     current_month = first_date.month
     number_day_per_month = calendar.monthrange(current_year, current_month)
-    last_date = first_date.replace(day=number_day_per_month)
+    last_date = first_date.replace(day=number_day_per_month[1])
     last_date_string = last_date.strftime('%Y-%m-%d')
     
     conn = connect()
