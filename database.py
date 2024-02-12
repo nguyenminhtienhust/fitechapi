@@ -237,7 +237,7 @@ def get_this_month_dashboard():
     final_dict = {"sales": sales_list}
 
     sumary_sql = ("select count(*) from suitecrm.leads and date_modified >= %s and date_modified <= %s")
-    cursor.execute(sumary_sql,())
+    cursor.execute(sumary_sql,(first_date_string,last_date_string))
     total_leads_result = cursor.fetchone()
     final_dict["total_leads"] = total_leads_result[0]
 
