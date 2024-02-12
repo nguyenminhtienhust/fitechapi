@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from database import connect
 from fastapi import HTTPException
-from database import get_item_by_name,find_minimum_leads_by_sale,get_dashboard,export_all_leads_in_Malaysia
+from database import get_item_by_name,find_minimum_leads_by_sale,get_all_dashboard,get_this_month_dashboard,get_today_dashboard,export_all_leads_in_Malaysia
 from pydantic import BaseModel
 from contextlib import asynccontextmanager
 #from psycopg_pool import AsyncConnectionPool
@@ -40,8 +40,24 @@ async def find_sale():
 
 @app.get("/dashboard")
 async def dashboard():
-    data = get_dashboard()
+    data = get_all_dashboard()
     return data
+
+@app.get("/dashboard-all")
+async def all_dashboard():
+    data = get_all_dashboard()
+    return data
+
+@app.get("/dashboard-this-month")
+async def this_month_dashboard():
+    data = get_this_month_dashboard()
+    return data
+
+@app.get("/dashboard-today")
+async def today_dashboard():
+    data = get_today_dashboard()
+    return data
+
 
 @app.get("/malaysia")
 async def malaysia():
