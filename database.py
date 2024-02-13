@@ -92,8 +92,7 @@ def assign_sale_with_lead(user_id,lead_id):
     conn = connect()
     cursor = conn.cursor()
     sql = ("update suitecrm.leads set assigned_user_id = %s where id = %s")
-    cursor.execute(sql,(user_id,lead_id))
-    results = cursor.execute()
+    results = cursor.execute(sql,(user_id,lead_id))
     cursor.close()
     return {"data":results}
 
