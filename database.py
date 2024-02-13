@@ -92,9 +92,10 @@ def assign_sale_with_lead(user_id,lead_id):
     conn = connect()
     cursor = conn.cursor()
     sql = ("update suitecrm.leads set assigned_user_id = %s where id = %s")
-    results = cursor.execute(sql,(user_id,lead_id))
+    cursor.execute(sql,(user_id,lead_id))
     cursor.close()
-    return {"data":results}
+    conn.commit()
+    return True
 
 
 def find_minimum_leads_by_sale():
