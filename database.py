@@ -79,10 +79,24 @@ def get_item_by_name(name):
         #print(result)
         return result[0]
 
-def get_all_active_user():
+def get_active_sales():
+    conn = connect()
+    cursor = conn.cursor(dictionary=True)
+    sql = ("select * from suitecrm.users where status = 'Active' and id != '6d14a07c-f8d3-d21a-f31c-6592da7f6c30' and is_admin = 'False';")
+    cursor.execute(sql,())
+    results = cursor.fetchall()
+    cursor.close()
+    return {"data":results}
+
+def assign_sale_with_lead(user_id,lead_id):
     conn = connect()
     cursor = conn.cursor()
-    sql = ("SELECT * FROM users where status = %s")
+    sql = ("update suitecrm.leads set assigned_user_id = %s where id = %s")
+    cursor.execute(sql,(user_id,lead_id))
+    results = cursor.execute()
+    cursor.close()
+    return {"data":results}
+
 
 def find_minimum_leads_by_sale():
     conn = connect()

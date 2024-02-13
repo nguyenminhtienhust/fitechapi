@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from database import connect
 from fastapi import HTTPException
-from database import get_item_by_name,find_minimum_leads_by_sale,get_all_dashboard,get_this_month_dashboard,get_today_dashboard,export_all_leads_in_Malaysia,get_leads_today,get_leads_yesterday
+from database import get_item_by_name,find_minimum_leads_by_sale,get_all_dashboard,get_this_month_dashboard,get_today_dashboard,export_all_leads_in_Malaysia,get_leads_today,get_leads_yesterday,get_active_sales,assign_sale_with_lead
 from pydantic import BaseModel
 from contextlib import asynccontextmanager
 #from psycopg_pool import AsyncConnectionPool
@@ -13,7 +13,11 @@ class ItemName(BaseModel):
 
 class ItemCount(BaseModel):
     user_id: str
-    
+
+class LeadAssignRequest(BaseModel):
+    lead_id: str
+    sale_id: str
+
 @app.post("/detail/")
 async def item_detail(item: ItemName):
     if get_item_by_name("tiktok"):
@@ -72,4 +76,14 @@ async def get_all_leads_today():
 @app.get("/get_leads_yesterday")
 async def get_all_leads_yesterday():
     data = get_leads_yesterday()
+    return data
+
+@app.get("/get_active_sales")
+async def get_all_active_sales():
+    data = get_active_sales()
+    return data
+
+@app.post("/assign_sale_with_lead")
+async def assign_lead(request: LeadAssignRequest):
+    data = assign_sale_with_lead(request.sale_id,request.lead_id)
     return data
