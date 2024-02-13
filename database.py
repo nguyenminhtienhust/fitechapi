@@ -30,9 +30,42 @@ def export_all_leads_in_Malaysia():
     if result is None:
         return ""
     else:
-        #print(result)
+        #print(result )
         return result
-    
+
+def get_leads_today():
+    today = datetime.today().date()
+    today_string = today.strftime('%Y-%m-%d')
+
+    yesterday = today - timedelta(days=1)
+    yesterday_string = yesterday.strftime('%Y-%m-%d')
+
+    tomorow = today + timedelta(days=1)
+    tomorow_string = tomorow.strftime('%Y-%m-%d')
+
+    conn = connect()
+    cursor = conn.cursor(dictionary=True)
+    today_sql = ("select * from suitecrm.leads where date_entered> %s and date_entered < %s")                                                                                                                                                             
+    cursor.execute(today_sql,(yesterday_string,tomorow_string))                                                                                                                                                               
+    results_today = cursor.fetchall()                                                                                                                                                
+    conn.close()
+    return {"data": results_today}
+
+def get_leads_yesterday():
+    today = datetime.today().date()
+    today_string = today.strftime('%Y-%m-%d')
+
+    yesterday = today - timedelta(days=2)
+    yesterday_string = yesterday.strftime('%Y-%m-%d')
+
+    conn = connect()
+    cursor = conn.cursor(dictionary=True)
+    today_sql = ("select * from suitecrm.leads where date_entered> %s and date_entered < %s")                                                                                                                                                             
+    cursor.execute(today_sql,(yesterday_string,today_string))                                                                                                                                                               
+    results_today = cursor.fetchall()                                                                                                                                                
+    conn.close()
+    return {"data": results_today}
+
 def get_item_by_name(name):
     conn = connect()
     cursor = conn.cursor()
