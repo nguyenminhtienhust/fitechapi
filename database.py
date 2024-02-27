@@ -77,7 +77,7 @@ def get_item_by_name(name):
         return ""
     else:
         #print(result)
-        return result[1]
+        return result[0]
 
 def get_active_sales():
     conn = connect()
