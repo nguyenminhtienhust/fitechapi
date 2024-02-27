@@ -69,7 +69,7 @@ def get_leads_yesterday():
 def get_item_by_name(name):
     conn = connect()
     cursor = conn.cursor()
-    sql = ("SELECT * FROM leads where last_name = %s")
+    sql = ("SELECT * FROM leads where first_name = %s")
     cursor.execute(sql, (name,))
     result = cursor.fetchone()
     conn.close()
