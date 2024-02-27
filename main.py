@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from database import connect
 from fastapi import HTTPException
-from database import get_item_by_name,find_minimum_leads_by_sale,get_all_dashboard,get_this_month_dashboard,get_today_dashboard,export_all_leads_in_Malaysia,get_leads_today,get_leads_yesterday,get_active_sales,assign_sale_with_lead
+from database import get_item_by_name,find_minimum_leads_by_sale,get_all_dashboard,get_this_month_dashboard,get_today_dashboard,export_all_leads_in_Malaysia,get_leads_today,get_leads_yesterday,get_active_sales,assign_sale_with_lead,get_account_by_name
 from pydantic import BaseModel
 from contextlib import asynccontextmanager
 #from psycopg_pool import AsyncConnectionPool
@@ -87,3 +87,11 @@ async def get_all_active_sales():
 async def assign_lead(request: LeadAssignRequest):
     data = assign_sale_with_lead(request.sale_id,request.lead_id)
     return data
+    
+@app.post("/accounts/check/")
+async def account_get(item: ItemName):
+    item_id = get_account_by_name(item.name)
+    if item_id is None:
+        return {"data" : ""}
+    else:
+        return {"data" : item_id}    
