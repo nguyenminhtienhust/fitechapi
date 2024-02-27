@@ -426,8 +426,7 @@ def get_today_dashboard():
 
     return {"data":final_dict}
     
-    
- def get_account_by_name(name):
+def get_account_by_name(name):
     conn = connect()
     cursor = conn.cursor()
     sql = ("SELECT * FROM accounts where name = %s")
@@ -437,5 +436,4 @@ def get_today_dashboard():
     if result is None:
         return ""
     else:
-        #print(result)
         return result[0]
