@@ -437,3 +437,27 @@ def get_account_by_name(name):
         return ""
     else:
         return result[0]
+        
+def check_exist_email(name):
+    conn = connect()
+    cursor = conn.cursor()
+    sql = ("SELECT * FROM email_addresses where email_address_caps = %s")
+    cursor.execute(sql, (name,))
+    result = cursor.fetchone()
+    conn.close()
+    if result is None:
+        return ""
+    else:
+        return result[0]
+        
+def check_email_lead(lead_id):
+    conn = connect()
+    cursor = conn.cursor()
+    sql = ("SELECT * FROM email_addr_bean_rel where bean_id = %s and bean_module = 'Leads'")
+    cursor.execute(sql, (lead_id,))
+    result = cursor.fetchone()
+    conn.close()
+    if result is None:
+        return ""
+    else:
+        return result[0]

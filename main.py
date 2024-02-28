@@ -1,7 +1,8 @@
 from fastapi import FastAPI, Request
 from database import connect
 from fastapi import HTTPException
-from database import get_item_by_name,find_minimum_leads_by_sale,get_all_dashboard,get_this_month_dashboard,get_today_dashboard,export_all_leads_in_Malaysia,get_leads_today,get_leads_yesterday,get_active_sales,assign_sale_with_lead,get_account_by_name
+from database import get_item_by_name,find_minimum_leads_by_sale,get_all_dashboard,get_this_month_dashboard,get_today_dashboard,export_all_leads_in_Malaysia,get_leads_today,get_leads_yesterday,get_active_sales,assign_sale_with_lead
+from database import get_account_by_name, check_exist_email, check_email_lead
 from pydantic import BaseModel
 from contextlib import asynccontextmanager
 #from psycopg_pool import AsyncConnectionPool
@@ -95,3 +96,20 @@ async def account_get(item: ItemName):
         return {"data" : ""}
     else:
         return {"data" : item_id}    
+        
+        
+@app.post("/emails/check/")
+async def email_get(item: ItemName):
+    item_id = check_exist_email(item.name)
+    if item_id is None:
+        return {"data" : ""}
+    else:
+        return {"data" : item_id} 
+        
+@app.post("/email_lead/check/")
+async def email_lead_get(item: ItemName):
+    item_id = check_email_lead(item.lead_id)
+    if item_id is None:
+        return {"data" : ""}
+    else:
+        return {"data" : item_id} 
