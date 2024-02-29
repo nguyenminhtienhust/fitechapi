@@ -19,6 +19,11 @@ class LeadAssignRequest(BaseModel):
     lead_id: str
     sale_id: str
 
+class ItemEmail(BaseModel):
+    id: str
+    email : str
+    email_cap: str
+
 @app.post("/detail/")
 async def item_detail(item: ItemName):
     if get_item_by_name("tiktok"):
@@ -107,7 +112,7 @@ async def email_get(item: ItemName):
         return {"data" : item_id} 
 
 @app.post("/emails/add/")
-async def email_add(item):
+async def email_add(item : ItemEmail):
     item_id = add_email_addressed(item.id, item.email, item.email_cap)
     if item_id is None:
         return {"data" : ""}
