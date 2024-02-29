@@ -466,7 +466,7 @@ def add_email_addressed(id, email, email_cap):
     conn = connect()
     cursor = conn.cursor()
     sql = ("insert into suitecrm.email_addresses (id, email_address, email_address_caps) values (%s, %s, %s)")
-    cursor.execute(sql, (id, email, email_cap))
+    cursor.execute(sql, (id, email, email_cap,))
     conn.commit()
     result = mycursor.rowcount
     conn.close()
