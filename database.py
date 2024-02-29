@@ -69,7 +69,7 @@ def get_leads_yesterday():
 def get_item_by_name(name):
     conn = connect()
     cursor = conn.cursor()
-    sql = ("SELECT * FROM leads where first_name = %s")
+    sql = ("SELECT * FROM leads where first_name = %s and Deleted = 0")
     cursor.execute(sql, (name,))
     result = cursor.fetchone()
     conn.close()
@@ -429,7 +429,7 @@ def get_today_dashboard():
 def get_account_by_name(name):
     conn = connect()
     cursor = conn.cursor()
-    sql = ("SELECT * FROM accounts where name = %s")
+    sql = ("SELECT * FROM suitecrm.accounts where name = %s")
     cursor.execute(sql, (name,))
     result = cursor.fetchone()
     conn.close()
@@ -441,7 +441,7 @@ def get_account_by_name(name):
 def check_exist_email(name):
     conn = connect()
     cursor = conn.cursor()
-    sql = ("SELECT * FROM email_addresses where email_address_caps = %s")
+    sql = ("SELECT * FROM suitecrm.email_addresses where email_address_caps = %s")
     cursor.execute(sql, (name,))
     result = cursor.fetchone()
     conn.close()
@@ -453,7 +453,7 @@ def check_exist_email(name):
 def check_email_lead(lead_id):
     conn = connect()
     cursor = conn.cursor()
-    sql = ("SELECT * FROM email_addr_bean_rel where bean_id = %s and bean_module = 'Leads'")
+    sql = ("SELECT * FROM suitecrm.email_addr_bean_rel where bean_id = %s and bean_module = 'Leads'")
     cursor.execute(sql, (lead_id,))
     result = cursor.fetchone()
     conn.close()
