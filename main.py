@@ -23,6 +23,9 @@ class ItemEmail(BaseModel):
     id: str
     email : str
     email_cap: str
+class ItemLead(BaseModel):
+    title: str
+    last_name: str
 
 @app.post("/detail/")
 async def item_detail(item: ItemName):
@@ -36,8 +39,8 @@ async def leads():
 	return {"data": True}
 
 @app.post("/leads/check/")
-async def check_leads(item: ItemName):
-    item_id = get_item_by_name(item.name)
+async def check_leads(item: ItemLead):
+    item_id = get_item_by_name(item.title, item.last_name)
     if item_id is None:
         return {"data" : ""}
     else:
