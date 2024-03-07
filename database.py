@@ -492,7 +492,7 @@ def get_contact_by_name(name):
 def get_contact_description(name):
 	conn = connect()
 	cursor = conn.cursor()
-	sql = ("SELECT * FROM suitecrm.contacts where id = %s")
+	sql = ("SELECT description FROM suitecrm.contacts where id = %s")
 	cursor.execute(sql, (name,))
 	result = cursor.fetchone()
 	conn.close()
