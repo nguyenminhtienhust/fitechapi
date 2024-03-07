@@ -495,7 +495,6 @@ def get_contact_description(id):
 	sql = ("SELECT * FROM suitecrm.contacts where id = %s")
 	cursor.execute(sql, (id,))
 	result = cursor.fetchone()
-	count = cursor.rowcount
 	conn.close()
 	return id
 	#if result is None:
