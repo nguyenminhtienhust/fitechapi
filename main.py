@@ -135,7 +135,4 @@ async def get_contact(item: ItemName):
 @app.post("/contact/getdescription/")
 async def get_contact_description(item: ItemName):
 	item_id = get_contact_by_name(item.name)
-	if item_id is None:
-		return {"data" : ""}
-	else:
-		return {"data" : item_id} 
+	return {"data" : item_id} 
