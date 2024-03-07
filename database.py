@@ -490,12 +490,12 @@ def get_contact_by_name(name):
 		#return result[0]
 
 def get_contact_description(name):
-	conn = connect()
-	cursor = conn.cursor()
-	sql = ("SELECT * FROM suitecrm.contacts where id = %s")
-	cursor.execute(sql, (name,))
-	result = cursor.fetchone()
-	conn.close()
+	#conn = connect()
+	#cursor = conn.cursor()
+	#sql = ("SELECT * FROM suitecrm.contacts where id = %s")
+	#cursor.execute(sql, (name,))
+	#result = cursor.fetchone()
+	#conn.close()
 	return name
 	#if result is None:
 		#return ""
