@@ -479,7 +479,7 @@ def get_contact_by_name(name):
 	cursor.execute(sql, (name))
 	result = cursor.fetchone()
 	conn.close()
-	return result[0]
+	return name
 	#if result is None:
 		#return ""
 	#else:
