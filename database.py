@@ -468,7 +468,7 @@ def add_email_addressed(id, email, email_cap):
 	sql = ("insert into suitecrm.email_addresses (id, email_address, email_address_caps) values (%s, %s, %s)")
 	cursor.execute(sql, (id, email, email_cap,))
 	conn.commit()
-	result = mycursor.rowcount
+	result = cursor.rowcount
 	conn.close()
 	return result
 
@@ -477,9 +477,13 @@ def get_contact_by_name(name):
 	cursor = conn.cursor()
 	sql = ("SELECT * FROM suitecrm.contacts where last_name = %s")
 	cursor.execute(sql, (name,))
-	result = cursor.fetchone()	
+	result = cursor.fetchall()	
+	count = cursor.rowcount
 	conn.close()
-	return result[0]
+	if(count > 0):
+		return result[0]
+	else:
+		return ""
 	#if result is None:
 		#return ""
 	#else:
