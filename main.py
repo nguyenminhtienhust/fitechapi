@@ -133,6 +133,6 @@ async def get_contact(item: ItemName):
 	return {"data" : item_id} 
 
 @app.post("/contact/getdescription/")
-async def get_contact_description(item: ItemName):
+async def get_contact_des(item: ItemName):
 	item_id = get_contact_description(item.name)
 	return {"data" : item_id} 
