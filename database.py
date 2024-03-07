@@ -497,7 +497,8 @@ def get_contact_description(id):
 	result = cursor.fetchone()
 	count = cursor.rowcount
 	conn.close()
-	if result is None:
-		return ""
-	else:
-		return result[0]
+	return id
+	#if result is None:
+		#return ""
+	#else:
+		#return result[0]
