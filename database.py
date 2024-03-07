@@ -476,7 +476,7 @@ def get_contact_by_name(name):
 	conn = connect()
 	cursor = conn.cursor()
 	sql = ("SELECT * FROM suitecrm.contacts where last_name = %s")
-	cursor.execute(sql, (name,))
+	cursor.execute(sql, (name))
 	result = cursor.fetchone()
 	conn.close()
 	return result[0]
