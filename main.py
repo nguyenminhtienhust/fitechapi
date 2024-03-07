@@ -130,7 +130,10 @@ async def email_lead_get(item: ItemName):
 @app.post("/contact/check/")
 async def get_contact(item: ItemName):
 	item_id = get_contact_by_name(item.name)
-	return {"data" : item_id} 
+	if item_id is None:
+		return {"data" : ""}
+	else:
+		return {"data" : item_id} 
 
 @app.post("/contact/getdescription/")
 async def get_contact_description(item: ItemName):
