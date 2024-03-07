@@ -478,8 +478,8 @@ def get_contact_by_name(name):
 	sql = ("SELECT * FROM suitecrm.contacts where last_name = %s")
 	cursor.execute(sql, (name,))
 	result = cursor.fetchone()
-	return name
 	conn.close()
+	return result[0]
 	#if result is None:
 		#return ""
 	#else:
