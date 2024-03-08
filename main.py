@@ -145,11 +145,17 @@ async def get_account_assigned(item: ItemName):
 @app.post("/lead/getassigneduserbycontact/")
 async def get_lead_assignedId_by_contact(item: ItemName):
 	item_id = get_lead_assigned_user_by_contact(item.name)
-	return {"data" : item_id} 
+	if item_id is None:
+		return {"data" : ""}
+	else:
+		return {"data" : item_id}    
 
 @app.post("/lead/getassigneduserbyaccount/")
 async def get_lead_assignedId_by_account(item: ItemName):
 	item_id = get_lead_assigned_user_by_account(item.name)
-	return {"data" : item_id} 
+	if item_id is None:
+		return {"data" : ""}
+	else:
+		return {"data" : item_id}   
 
 	
