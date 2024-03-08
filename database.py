@@ -523,11 +523,11 @@ def get_lead_assigned_user_by_contact(name):
 	result = cursor.fetchall()
 	count = cursor.rowcount
 	conn.close()
-	#return name
-	if counr > 0:
-		return result[0]
-	else:
-		return ""
+	return count
+	#if counr > 0:
+		#return result[0]
+	#else:
+		#return ""
 
 def get_lead_assigned_user_by_account(name):
 	conn = connect()
@@ -537,8 +537,8 @@ def get_lead_assigned_user_by_account(name):
 	result = cursor.fetchall()
 	count = cursor.rowcount
 	conn.close()
-	#return name
-	if counr > 0:
-		return result[0]
-	else:
-		return ""
+	return count
+	#if counr > 0:
+		#return result[0]
+	#else:
+		#return ""
