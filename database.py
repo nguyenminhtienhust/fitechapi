@@ -536,7 +536,7 @@ def get_lead_assigned_user_by_account(name):
 	result = cursor.fetchall()
 	count = cursor.rowcount
 	conn.close()
-	if coun > 0:
+	if count > 0:
 		return result[0]
 	else:
 		return ""
