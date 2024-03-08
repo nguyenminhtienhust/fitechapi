@@ -489,10 +489,23 @@ def get_contact_by_name(name):
 	#else:
 		#return result[0]
 
-def get_contact_description(name):
+def get_contact_assigned_user(name):
 	conn = connect()
 	cursor = conn.cursor()
-	sql = ("SELECT description FROM suitecrm.contacts where id = %s")
+	sql = ("SELECT assigned_user_id FROM suitecrm.contacts where id = %s")
+	cursor.execute(sql, (name,))
+	result = cursor.fetchone()
+	conn.close()
+	#return name
+	if result is None:
+		return ""
+	else:
+		return result[0]
+
+def get_account_assigned_user(name):
+	conn = connect()
+	cursor = conn.cursor()
+	sql = ("SELECT assigned_user_id FROM suitecrm.accounts where id = %s")
 	cursor.execute(sql, (name,))
 	result = cursor.fetchone()
 	conn.close()
