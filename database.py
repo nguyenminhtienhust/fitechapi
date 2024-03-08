@@ -514,3 +514,29 @@ def get_account_assigned_user(name):
 		return ""
 	else:
 		return result[0]
+
+def get_lead_assigned_user_by_contact(name):
+	conn = connect()
+	cursor = conn.cursor()
+	sql = ("SELECT assigned_user_id FROM suitecrm.leads where first_name = %s")
+	cursor.execute(sql, (name,))
+	result = cursor.fetchone()
+	conn.close()
+	#return name
+	if result is None:
+		return ""
+	else:
+		return result[0]
+
+def get_lead_assigned_user_by_account(name):
+	conn = connect()
+	cursor = conn.cursor()
+	sql = ("SELECT assigned_user_id FROM suitecrm.leads where last_name = %s")
+	cursor.execute(sql, (name,))
+	result = cursor.fetchone()
+	conn.close()
+	#return name
+	if result is None:
+		return ""
+	else:
+		return result[0]

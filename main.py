@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request
 from database import connect
 from fastapi import HTTPException
 from database import get_item_by_name,find_minimum_leads_by_sale,get_all_dashboard,get_this_month_dashboard,get_today_dashboard,export_all_leads_in_Malaysia,get_leads_today,get_leads_yesterday,get_active_sales,assign_sale_with_lead
-from database import get_account_by_name, check_exist_email, check_email_lead, add_email_addressed, get_contact_by_name, get_contact_assigned_user, get_account_assigned_user
+from database import get_account_by_name, check_exist_email, check_email_lead, add_email_addressed, get_contact_by_name, get_contact_assigned_user, get_account_assigned_user, get_lead_assigned_user_by_contact, get_lead_assigned_user_by_account
 from pydantic import BaseModel
 from contextlib import asynccontextmanager
 #from psycopg_pool import AsyncConnectionPool
@@ -141,3 +141,15 @@ async def get_contact_assigned(item: ItemName):
 async def get_account_assigned(item: ItemName):
 	item_id = get_account_assigned_user(item.name)
 	return {"data" : item_id} 
+
+@app.post("/lead/getassigneduserbycontact/")
+async def get_lead_assignedId_by_contact(item: ItemName):
+	item_id = get_lead_assigned_user_by_contact(item.name)
+	return {"data" : item_id} 
+
+@app.post("/lead/getassigneduserbyaccount/")
+async def get_lead_assignedId_by_account(item: ItemName):
+	item_id = get_lead_assigned_user_by_account(item.name)
+	return {"data" : item_id} 
+
+	
