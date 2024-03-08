@@ -520,23 +520,25 @@ def get_lead_assigned_user_by_contact(name):
 	cursor = conn.cursor()
 	sql = ("SELECT assigned_user_id FROM suitecrm.leads where first_name = %s")
 	cursor.execute(sql, (name,))
-	result = cursor.fetchone()
+	result = cursor.fetchall()
+	count = cursor.rowcount
 	conn.close()
 	#return name
-	if result is None:
-		return ""
-	else:
+	if counr > 0:
 		return result[0]
+	else:
+		return ""
 
 def get_lead_assigned_user_by_account(name):
 	conn = connect()
 	cursor = conn.cursor()
 	sql = ("SELECT assigned_user_id FROM suitecrm.leads where last_name = %s")
 	cursor.execute(sql, (name,))
-	result = cursor.fetchone()
+	result = cursor.fetchall()
+	count = cursor.rowcount
 	conn.close()
 	#return name
-	if result is None:
-		return ""
-	else:
+	if counr > 0:
 		return result[0]
+	else:
+		return ""
