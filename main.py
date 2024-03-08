@@ -137,7 +137,7 @@ async def get_contact_assigned(item: ItemName):
 	item_id = get_contact_assigned_user(item.name)
 	return {"data" : item_id} 
 
-@app.post("/acount/getassigneduser/")
+@app.post("/account/getassigneduser/")
 async def get_account_assigned(item: ItemName):
 	item_id = get_account_assigned_user(item.name)
 	return {"data" : item_id} 
