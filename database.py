@@ -518,7 +518,7 @@ def get_account_assigned_user(name):
 def get_lead_assigned_user_by_contact(name):
 	conn = connect()
 	cursor = conn.cursor()
-	sql = ("SELECT * FROM suitecrm.leads where first_name = %s")
+	sql = ("SELECT * FROM suitecrm.leads where first_name = %s and assigned_user_id is not null and assigned_user_id <> '' ")
 	cursor.execute(sql, (name,))
 	result = cursor.fetchone()
 	count = cursor.rowcount
@@ -531,7 +531,7 @@ def get_lead_assigned_user_by_contact(name):
 def get_lead_assigned_user_by_account(name):
 	conn = connect()
 	cursor = conn.cursor()
-	sql = ("SELECT * FROM suitecrm.leads where last_name = %s")
+	sql = ("SELECT * FROM suitecrm.leads where last_name = %s and assigned_user_id is not null and assigned_user_id <> '' ")
 	cursor.execute(sql, (name,))
 	result = cursor.fetchone()
 	count = cursor.rowcount
