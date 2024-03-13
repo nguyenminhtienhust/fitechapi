@@ -131,7 +131,7 @@ async def email_lead_get(item: ItemName):
 async def get_contact(item: ItemName):
 	item_id = get_contact_by_name(item.name)
 	if item_id is None:
-		return None
+		return {data : ""}
 	else:
 		return {"data" : item_id[0], "des": item_id[5]}   
 
