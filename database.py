@@ -480,7 +480,7 @@ def get_contact_by_name(name):
 	result = cursor.fetchone()	
 	conn.close()
 	if result is None:
-		return ""
+		return None
 	else:
 		return result
 	#if result is None:
