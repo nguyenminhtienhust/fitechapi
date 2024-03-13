@@ -133,7 +133,7 @@ async def get_contact(item: ItemName):
 	if item_id is None:
 		return {"data" : ""}
 	else:
-		return {"data" : item_id}   
+		return {"data" : item_id[0], "des": item_id[5]}   
 
 @app.post("/contact/getassigneduser/")
 async def get_contact_assigned(item: ItemName):
