@@ -475,7 +475,7 @@ def add_email_addressed(id, email, email_cap):
 def get_contact_by_name(name):
 	conn = connect()
 	cursor = conn.cursor()
-	sql = ("SELECT * FROM suitecrm.contacts where last_name = %s and deleted = 1 and created_by = '1'")
+	sql = ("SELECT * FROM suitecrm.contacts where last_name = %s and created_by = '1'")
 	cursor.execute(sql, (name,))
 	result = cursor.fetchone()	
 	conn.close()
