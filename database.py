@@ -77,7 +77,7 @@ def get_item_by_name(title, account):
 		return ""
 	else:
 		#print(result)
-		return result[0]
+		return result
 
 def get_active_sales():
 	conn = connect()

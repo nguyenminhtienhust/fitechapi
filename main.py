@@ -42,9 +42,9 @@ async def leads():
 async def check_leads(item: ItemLead):
 	item_id = get_item_by_name(item.title, item.last_name)
 	if item_id is None:
-		return {"data" : ""}
+		return {"data" : "", "status" : ""}
 	else:
-		return {"data" : item_id}
+		return {"data" : item_id[0], "status" : item_id[39]}
 
 @app.get("/leads/find-minimum-sale")
 async def find_sale():
