@@ -436,7 +436,7 @@ def get_account_by_name(name):
 	if result is None:
 		return ""
 	else:
-		return result[0]
+		return result
 		
 def check_exist_email(name):
 	conn = connect()

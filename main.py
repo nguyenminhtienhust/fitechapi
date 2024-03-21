@@ -100,10 +100,10 @@ async def assign_lead(request: LeadAssignRequest):
 @app.post("/accounts/check/")
 async def account_get(item: ItemName):
 	item_id = get_account_by_name(item.name)
-	if item_id is None:
-		return {"data" : ""}
+	if item_id == "":
+		return {"data" : "", "des" : ""}
 	else:
-		return {"data" : item_id}    
+		return {"data" : item_id[0], "des" : item_id[6]}    
 		
 		
 @app.post("/emails/check/")
