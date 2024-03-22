@@ -66,11 +66,11 @@ def get_leads_yesterday():
 	conn.close()
 	return {"data": results_today}
 
-def get_item_by_name(title, account):
+def get_item_by_name(title, account, contact):
 	conn = connect()
 	cursor = conn.cursor()
-	sql = ("SELECT * FROM leads where title = %s and last_name = %s and Deleted = 0")
-	cursor.execute(sql, (title,account))
+	sql = ("SELECT * FROM leads where title = %s and last_name = %s and first_name = %s and Deleted = 0")
+	cursor.execute(sql, (title,account, contact))
 	result = cursor.fetchone()
 	conn.close()
 	if result is None:
