@@ -26,6 +26,7 @@ class ItemEmail(BaseModel):
 class ItemLead(BaseModel):
 	title: str
 	last_name: str
+	first_name : str
 
 @app.post("/detail/")
 async def item_detail(item: ItemName):
