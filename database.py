@@ -70,6 +70,8 @@ def get_item_by_name(title, account, contact):
 	conn = connect()
 	cursor = conn.cursor()
 	sql = ("SELECT * FROM suitecrm.leads where title = %s and last_name = %s and first_name = %s and Deleted = 0")
+	if(contact == ""):
+		sql = ("SELECT * FROM suitecrm.leads where title = %s and last_name = %s and (first_name = %s or first_name is Null) and Deleted = 0")
 	cursor.execute(sql, (title,account, contact))
 	result = cursor.fetchone()
 	conn.close()
