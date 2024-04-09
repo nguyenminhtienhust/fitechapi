@@ -140,37 +140,37 @@ def get_all_dashboard():
 		full_name = sale[8] + " " + sale[7]
 		detail_dict = {"full_name":full_name}
 
-		total_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s")
+		total_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s and deleted = 0 ")
 		cursor.execute(total_sql,(sale[0],))                                                                                                                                                               
 		results_total = cursor.fetchone()                                                                                                                                                   
 		detail_dict["total_leads"] = results_total[0]
 
-		new_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s and status = 'New'")
+		new_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s and status = 'New' and deleted = 0")
 		cursor.execute(new_sql,(sale[0],))
 		results_new = cursor.fetchone()
 		detail_dict["total_new"] = results_new[0]
 
-		assigned_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s and status = 'Assigned'")
+		assigned_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s and status = 'Assigned' and deleted = 0")
 		cursor.execute(assigned_sql,(sale[0],))
 		results_assigned = cursor.fetchone()
 		detail_dict["total_assigned"] = results_assigned[0]
 		
-		inprocess_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s and status = 'In Process'")
+		inprocess_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s and status = 'In Process' and deleted = 0")
 		cursor.execute(inprocess_sql,(sale[0],))
 		results_inprocess = cursor.fetchone()
 		detail_dict["total_inprocess"] = results_inprocess[0]
 		
-		converted_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s and status = 'Converted'")
+		converted_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s and status = 'Converted' and deleted = 0")
 		cursor.execute(converted_sql,(sale[0],))
 		results_converted = cursor.fetchone()
 		detail_dict["total_converted"] = results_converted[0]
 		
-		recycled_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s and status = 'Recycled'")
+		recycled_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s and status = 'Recycled' and deleted = 0")
 		cursor.execute(recycled_sql,(sale[0],))
 		results_recycled = cursor.fetchone()
 		detail_dict["total_recycled"] = results_recycled[0]
 		
-		dead_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s and status = 'Dead'")
+		dead_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s and status = 'Dead' and deleted = 0")
 		cursor.execute(dead_sql,(sale[0],))
 		results_dead = cursor.fetchone()
 		detail_dict["total_dead"] = results_dead[0]
@@ -178,47 +178,47 @@ def get_all_dashboard():
 		sales_list.append(detail_dict)
 	final_dict = {"sales": sales_list}
 
-	sumary_sql = ("select count(*) from suitecrm.leads")
+	sumary_sql = ("select count(*) from suitecrm.leads where deleted = 0")
 	cursor.execute(sumary_sql,())
 	total_leads_result = cursor.fetchone()
 	final_dict["total_leads"] = total_leads_result[0]
 
-	supersale_sql = ("select count(*) from suitecrm.leads where created_by = '6d14a07c-f8d3-d21a-f31c-6592da7f6c30'")
+	supersale_sql = ("select count(*) from suitecrm.leads where created_by = '6d14a07c-f8d3-d21a-f31c-6592da7f6c30' and deleted = 0")
 	cursor.execute(supersale_sql,())
 	total_leads_by_supersale = cursor.fetchone()
 	final_dict["total_leads_by_supersale"] = total_leads_by_supersale[0]
 
-	admin_sql = ("select count(*) from suitecrm.leads where created_by = '1'")
+	admin_sql = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0")
 	cursor.execute(admin_sql,())
 	total_leads_by_admin = cursor.fetchone()
 	final_dict["total_leads_by_admin"] = total_leads_by_admin[0]
 
-	new_sql = ("select count(*) from suitecrm.leads where status = 'New'")
+	new_sql = ("select count(*) from suitecrm.leads where status = 'New' and deleted = 0")
 	cursor.execute(new_sql,())
 	results_new = cursor.fetchone()
 	final_dict["total_new_leads"] = results_new[0]
 
-	assigned_sql = ("select count(*) from suitecrm.leads where status = 'Assigned'")
+	assigned_sql = ("select count(*) from suitecrm.leads where status = 'Assigned' and deleted = 0")
 	cursor.execute(assigned_sql,())
 	results_assigned = cursor.fetchone()
 	final_dict["total_assigned"] = results_assigned[0]
 		
-	inprocess_sql = ("select count(*) from suitecrm.leads where status = 'In Process'")
+	inprocess_sql = ("select count(*) from suitecrm.leads where status = 'In Process' and deleted = 0")
 	cursor.execute(inprocess_sql,())
 	results_inprocess = cursor.fetchone()
 	final_dict["total_inprocess"] = results_inprocess[0]
 		
-	converted_sql = ("select count(*) from suitecrm.leads where status = 'Converted'")
+	converted_sql = ("select count(*) from suitecrm.leads where status = 'Converted' and deleted = 0")
 	cursor.execute(converted_sql,())
 	results_converted = cursor.fetchone()
 	final_dict["total_converted"] = results_converted[0]
 		
-	recycled_sql = ("select count(*) from suitecrm.leads where status = 'Recycled'")
+	recycled_sql = ("select count(*) from suitecrm.leads where status = 'Recycled' and deleted = 0")
 	cursor.execute(recycled_sql,())
 	results_recycled = cursor.fetchone()
 	final_dict["total_recycled"] = results_recycled[0]
 	
-	dead_sql = ("select count(*) from suitecrm.leads where status = 'Dead'")
+	dead_sql = ("select count(*) from suitecrm.leads where status = 'Dead' and deleted = 0")
 	cursor.execute(dead_sql,())
 	results_dead = cursor.fetchone()
 	final_dict["total_dead"] = results_dead[0]
