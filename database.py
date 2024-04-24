@@ -456,8 +456,8 @@ def check_email_lead(lead_id):
 	conn = connect()
 	cursor = conn.cursor()
 	email_list = []
-	sql = ("SELECT * FROM suitecrm.email_addresses where id in (select email_address_id from suitecrm.email_addr_bean_rel where bean_id = %s and bean_module = 'Leads')")
-	cursor.execute(sql, (lead_id))
+	sql = ("SELECT * FROM suitecrm.email_addresses where id '8c42f5a3-8c5e-41d9-58b6-662877e4b2bc'")
+	cursor.execute(sql)
 	emails = cursor.fetchone()
 	# conn.close()
 	# for email in emails:
