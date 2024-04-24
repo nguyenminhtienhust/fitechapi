@@ -456,7 +456,7 @@ def check_email_lead(lead_id):
 	conn = connect()
 	cursor = conn.cursor()
 	email_list = []
-	sql = ("SELECT * FROM suitecrm.email_addresses where id '8c42f5a3-8c5e-41d9-58b6-662877e4b2bc'")
+	sql = ("SELECT * FROM suitecrm.email_addresses where id = '8c42f5a3-8c5e-41d9-58b6-662877e4b2bc'")
 	cursor.execute(sql)
 	emails = cursor.fetchone()
 	# conn.close()
