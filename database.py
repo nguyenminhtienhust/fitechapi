@@ -456,13 +456,13 @@ def check_email_lead(lead_id):
 	conn = connect()
 	cursor = conn.cursor()
 	email_list = []
-	sql = ("SELECT * FROM suitecrm.email_addresses where id = '8c42f5a3-8c5e-41d9-58b6-662877e4b2bc'")
+	sql = ("SELECT email_address FROM suitecrm.email_addresses where id = '8c42f5a3-8c5e-41d9-58b6-662877e4b2bc'")
 	cursor.execute(sql)
-	emails = cursor.fetchone()
-	# conn.close()
-	# for email in emails:
-	# 	email_list.append(email)
-	return {"email_list" : emails[0]}
+	emails = cursor.fetchall()
+	conn.close()
+	for email in emails:
+		email_list.append(email)
+	return {"email_list" : email_list}
 
 def add_email_addressed(id, email, email_cap):
 	conn = connect()
