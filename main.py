@@ -136,7 +136,7 @@ async def email_add(item : ItemEmail):
 @app.post("/email_lead/check/")
 async def email_lead_get(item: ItemName):
 	data = check_email_lead(item.name)
-	return {"data": data}
+	return data
 
 @app.post("/contact/check/")
 async def get_contact(item: ItemName):
