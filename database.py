@@ -456,7 +456,7 @@ def check_email_lead(lead_id):
 	conn = connect()
 	cursor = conn.cursor()
 	sql = ("SELECT email_address FROM suitecrm.email_addresses where id = (select email_address_id from suitecrm.email_addr_bean_rel where bean_id = %s and bean_module = 'Leads')")
-	cursor.execute(sql, (lead_id,))
+	cursor.execute(sql, (lead_id))
 	result = cursor.fetchall()
 	conn.close()
 	if result is None:
