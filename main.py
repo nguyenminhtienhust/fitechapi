@@ -131,11 +131,8 @@ async def email_add(item : ItemEmail):
 		
 @app.post("/email_lead/check/")
 async def email_lead_get(item: ItemName):
-	item_id = check_email_lead(item.name)
-	if item_id is None:
-		return {"data" : ""}
-	else:
-		return {"data" : item_id[0]} 
+	data = check_email_lead(item.name)
+	return data
 
 @app.post("/contact/check/")
 async def get_contact(item: ItemName):
