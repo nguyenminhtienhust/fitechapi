@@ -462,7 +462,7 @@ def check_email_lead(lead_id):
 	conn.close()
 	# for email in emails:
 	# 	email_list.append(email)
-	return {"email_list" : emails[0]}
+	return {"email_list" : "0"}
 
 def add_email_addressed(id, email, email_cap):
 	conn = connect()
