@@ -460,8 +460,10 @@ def check_email_lead(lead_id):
 	cursor.execute(sql,(lead_id,))
 	emails = cursor.fetchall()
 	conn.close()
-	for email in emails:
-		email_list.append(email)
+	email_list.append("1")
+	email_list.append("2")
+	# for email in emails:
+	# 	email_list.append(email)
 	return {"email_list" : email_list}
 
 def add_email_addressed(id, email, email_cap):
