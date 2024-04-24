@@ -455,12 +455,14 @@ def check_exist_email(name):
 def check_email_lead(lead_id):
 	conn = connect()
 	cursor = conn.cursor()
-	emails = []
+	email_list = []
 	sql = ("SELECT email_address FROM suitecrm.email_addresses where id = (select email_address_id from suitecrm.email_addr_bean_rel where bean_id = %s and bean_module = 'Leads')")
 	cursor.execute(sql, (lead_id))
 	emails = cursor.fetchall()
 	conn.close()
-	return {"email_list" : emails}
+	for email in emails:
+		email_list.append(email)
+	return {"email_list" : email_list}
 
 def add_email_addressed(id, email, email_cap):
 	conn = connect()
