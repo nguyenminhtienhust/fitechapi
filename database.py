@@ -544,6 +544,7 @@ def get_lead_assigned_user_by_account(name):
 	results = cursor.fetchall()
 	conn.close()
 	res_size = len(results)
+	return res_size
 	if res_size == 0:
 		return ""
 	else:
