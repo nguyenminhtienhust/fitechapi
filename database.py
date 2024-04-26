@@ -495,26 +495,32 @@ def get_contact_assigned_user(name):
 	cursor = conn.cursor()
 	sql = ("SELECT assigned_user_id FROM suitecrm.contacts where id = %s")
 	cursor.execute(sql, (name,))
-	results = []
-	results = cursor.fetchall()
+	result = cursor.fetchone()
 	conn.close()
-	res_size = len(results)
-	if res_size == 0:
+	#return name
+	if result is None:
 		return ""
 	else:
-		if res_size == 1:
-			return results[0]
-		else:
-			for result in results:
-				if(result != "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58"):
-					return result
-
+		return result[0]
 
 def get_account_assigned_user(name):
 	conn = connect()
 	cursor = conn.cursor()
 	sql = ("SELECT assigned_user_id FROM suitecrm.accounts where id = %s")
 	cursor.execute(sql, (name,))
+	result = cursor.fetchone()
+	conn.close()
+	#return name
+	if result is None:
+		return ""
+	else:
+		return result[0]
+
+def get_lead_assigned_user_by_contact(name):
+	conn = connect()
+	cursor = conn.cursor()
+	sql = ("SELECT assigned_user_id FROM suitecrm.leads where first_name = %s and assigned_user_id is not null and assigned_user_id <> '' ")
+	cursor.execute(sql, (name,))
 	results = []
 	results = cursor.fetchall()
 	conn.close()
@@ -529,28 +535,21 @@ def get_account_assigned_user(name):
 				if(result != "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58"):
 					return result
 
-def get_lead_assigned_user_by_contact(name):
-	conn = connect()
-	cursor = conn.cursor()
-	sql = ("SELECT * FROM suitecrm.leads where first_name = %s and assigned_user_id is not null and assigned_user_id <> '' ")
-	cursor.execute(sql, (name,))
-	result = cursor.fetchone()
-	count = cursor.rowcount
-	conn.close()
-	if result is None:
-		return ""
-	else:
-		return result[7]
-
 def get_lead_assigned_user_by_account(name):
 	conn = connect()
 	cursor = conn.cursor()
-	sql = ("SELECT * FROM suitecrm.leads where last_name = %s and assigned_user_id is not null and assigned_user_id <> '' ")
+	sql = ("SELECT assigned_user_id FROM suitecrm.leads where last_name = %s and assigned_user_id is not null and assigned_user_id <> '' ")
 	cursor.execute(sql, (name,))
-	result = cursor.fetchone()
-	count = cursor.rowcount
+	results = []
+	results = cursor.fetchall()
 	conn.close()
-	if result is None:
+	res_size = len(results)
+	if res_size == 0:
 		return ""
 	else:
-		return result[7]
+		if res_size == 1:
+			return results[0]
+		else:
+			for result in results:
+				if(result != "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58"):
+					return result
