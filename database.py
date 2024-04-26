@@ -519,7 +519,7 @@ def get_account_assigned_user(name):
 def get_lead_assigned_user_by_contact(name):
 	conn = connect()
 	cursor = conn.cursor()
-	sql = ("SELECT assigned_user_id FROM suitecrm.leads where first_name = %s and assigned_user_id is not null and assigned_user_id <> '' ")
+	sql = ("SELECT assigned_user_id FROM suitecrm.leads where first_name = %s and assigned_user_id is not null and assigned_user_id <> '' and assigned_user_id <> 'd6ea87ac-8c7e-a4ed-ba81-65f500a98e58' ")
 	cursor.execute(sql, (name,))
 	results = []
 	results = cursor.fetchall()
@@ -538,13 +538,12 @@ def get_lead_assigned_user_by_contact(name):
 def get_lead_assigned_user_by_account(name):
 	conn = connect()
 	cursor = conn.cursor()
-	sql = ("SELECT assigned_user_id FROM suitecrm.leads where last_name = %s and assigned_user_id is not null and assigned_user_id <> '' ")
+	sql = ("SELECT assigned_user_id FROM suitecrm.leads where last_name = %s and assigned_user_id is not null and assigned_user_id <> '' and assigned_user_id <> 'd6ea87ac-8c7e-a4ed-ba81-65f500a98e58'")
 	cursor.execute(sql, (name,))
 	results = []
 	results = cursor.fetchall()
 	conn.close()
 	res_size = len(results)
-	return res_size
 	if res_size == 0:
 		return ""
 	else:
