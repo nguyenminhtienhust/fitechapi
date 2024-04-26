@@ -517,11 +517,10 @@ def get_account_assigned_user(name):
 	results = []
 	results = cursor.fetchall()
 	conn.close()
-	return "aaaa"
-	if results.length == 0:
+	if results.length() == 0:
 		return ""
 	else:
-		if results.length == 1:
+		if results.length() == 1:
 			return results[0]
 		else:
 			for result in results:
