@@ -495,26 +495,37 @@ def get_contact_assigned_user(name):
 	cursor = conn.cursor()
 	sql = ("SELECT assigned_user_id FROM suitecrm.contacts where id = %s")
 	cursor.execute(sql, (name,))
-	result = cursor.fetchone()
+	results = []
+	results = cursor.fetchall()
 	conn.close()
-	#return name
-	if result is None:
+	if results.length == 0:
 		return ""
 	else:
-		return result[0]
+		if results.length == 1:
+			return results[0]
+		else:
+			for result in results:
+				if(result != "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58"):
+					return result
+
 
 def get_account_assigned_user(name):
 	conn = connect()
 	cursor = conn.cursor()
 	sql = ("SELECT assigned_user_id FROM suitecrm.accounts where id = %s")
 	cursor.execute(sql, (name,))
-	result = cursor.fetchone()
+	results = []
+	results = cursor.fetchall()
 	conn.close()
-	#return name
-	if result is None:
+	if results.length == 0:
 		return ""
 	else:
-		return result[0]
+		if results.length == 1:
+			return results[0]
+		else:
+			for result in results:
+				if(result != "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58"):
+					return result
 
 def get_lead_assigned_user_by_contact(name):
 	conn = connect()
