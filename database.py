@@ -178,7 +178,7 @@ def get_all_dashboard():
 		sales_list.append(detail_dict)
 	final_dict = {"sales": sales_list}
 
-	sumary_sql = ("select count(*) from suitecrm.leads where created_by <> 'dec93fd7-2d9f-a0d0-66e0-65941896a815' and deleted = 0")
+	sumary_sql = ("select count(*) from suitecrm.leads where deleted = 0")
 	cursor.execute(sumary_sql,())
 	total_leads_result = cursor.fetchone()
 	final_dict["total_leads"] = total_leads_result[0]
@@ -187,6 +187,8 @@ def get_all_dashboard():
 	cursor.execute(supersale_sql,())
 	total_leads_by_supersale = cursor.fetchone()
 	final_dict["total_leads_by_supersale"] = total_leads_by_supersale[0]
+
+	supersale_
 
 	admin_sql = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0")
 	cursor.execute(admin_sql,())
