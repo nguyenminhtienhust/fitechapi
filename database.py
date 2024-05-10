@@ -188,8 +188,6 @@ def get_all_dashboard():
 	total_leads_by_supersale = cursor.fetchone()
 	final_dict["total_leads_by_supersale"] = total_leads_by_supersale[0]
 
-	supersale_
-
 	admin_sql = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0")
 	cursor.execute(admin_sql,())
 	total_leads_by_admin = cursor.fetchone()
