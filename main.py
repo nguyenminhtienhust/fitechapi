@@ -3,6 +3,7 @@ from database import connect
 from fastapi import HTTPException
 from database import get_item_by_name,find_minimum_leads_by_sale,get_all_dashboard,get_this_month_dashboard,get_today_dashboard,export_all_leads_in_Malaysia,get_leads_today,get_leads_yesterday,get_active_sales,assign_sale_with_lead
 from database import get_account_by_name, check_exist_email, check_email_lead, add_email_addressed, get_contact_by_name, get_contact_assigned_user, get_account_assigned_user, get_lead_assigned_user_by_contact, get_lead_assigned_user_by_account
+form database import get_lead_count
 from pydantic import BaseModel
 from contextlib import asynccontextmanager
 #from psycopg_pool import AsyncConnectionPool
@@ -27,6 +28,11 @@ class ItemLead(BaseModel):
 	title: str
 	last_name: str
 	first_name : str
+
+class ItemGetLeadCount(BaseModel):
+	date_from: str
+	date_to: str
+	sale_id : str
 
 @app.post("/detail/")
 async def item_detail(item: ItemName):
@@ -172,4 +178,7 @@ async def get_lead_assignedId_by_account(item: ItemName):
 	else:
 		return {"data" : item_id}   
 
-	
+@app.post("lead/getleadcount/")
+async def get_lead_count_by_day(item: ItemGetLeadCount)
+	lead_count = get_lead_count(item.date_from, item.date_to, item.sale_id)
+	return {"lead_count" : lead_count}

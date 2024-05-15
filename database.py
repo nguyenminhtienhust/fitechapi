@@ -188,6 +188,9 @@ def get_all_dashboard():
 	total_leads_by_supersale = cursor.fetchone()
 	final_dict["total_leads_by_supersale"] = total_leads_by_supersale[0]
 
+	date_today = datetime.now()
+	month_first_day = date_today.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+
 	admin_sql = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0")
 	cursor.execute(admin_sql,())
 	total_leads_by_admin = cursor.fetchone()
@@ -539,3 +542,13 @@ def get_lead_assigned_user_by_account(name):
 		return ""
 	else:
 		return result
+
+def get_lead_count(date_from, date_to, sale_id):
+	#datetime_object = datetime.strptime(date_from, '%m/%d/%y %H:%M:%S')
+	conn = connect()
+	cursor = conn.cursor()
+	sql = ("SELECT count(1) FROM suitecrm.leads where created_by = %s and date_entered >= %s and date_entered <= %s")
+	cursor.execute(sql, (sale_id,date_from, date_to))
+	result = cursor.fetchone()
+	conn.close()
+	return result
