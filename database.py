@@ -542,3 +542,13 @@ def get_lead_assigned_user_by_account(name):
 		return ""
 	else:
 		return result
+
+def get_lead_count(date_from, date_to, sale_id):
+	#datetime_object = datetime.strptime(date_from, '%m/%d/%y %H:%M:%S')
+	conn = connect()
+	cursor = conn.cursor()
+	sql = ("SELECT count(1) FROM suitecrm.leads where created_by = %s")
+	cursor.execute(sql, (sale_id,date_from, date_to))
+	result = cursor.fetchone()
+	conn.close()
+	return result
