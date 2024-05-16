@@ -178,8 +178,4 @@ async def get_lead_assignedId_by_account(item: ItemName):
 	else:
 		return {"data" : item_id}   
 
-@app.get("/lead/getleadcount/")
-async def get_lead_count_by_day(item: ItemName)
-	lead_count = get_lead_count(item.name)
-	return {"lead_count" : lead_count}
 
