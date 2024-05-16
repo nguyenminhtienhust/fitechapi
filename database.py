@@ -547,7 +547,7 @@ def get_lead_count(date_from, date_to, sale_id):
 	#datetime_object = datetime.strptime(date_from, '%m/%d/%y %H:%M:%S')
 	conn = connect()
 	cursor = conn.cursor()
-	sql = ("SELECT count(*) FROM suitecrm.leads where created_by = %s")
+	sql = ("SELECT assigned_user_id FROM suitecrm.leads where last_name = %s and assigned_user_id is not null and assigned_user_id <> '' and assigned_user_id <> 'd6ea87ac-8c7e-a4ed-ba81-65f500a98e58'")
 	cursor.execute(sql, (sale_id,))
 	result = cursor.fetchone()
 	conn.close()
