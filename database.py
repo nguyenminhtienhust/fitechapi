@@ -12,12 +12,20 @@ MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD")
 MYSQL_DB = os.getenv("MYSQL_DB")
 
 # Connect to MySQL
+# def connect():
+# 	return mysql.connector.connect(
+# 		host=MYSQL_HOST,
+# 		user=MYSQL_USER,
+# 		password=MYSQL_PASSWORD,
+# 		database=MYSQL_DB
+# 	)
+
 def connect():
 	return mysql.connector.connect(
-		host=MYSQL_HOST,
-		user=MYSQL_USER,
-		password=MYSQL_PASSWORD,
-		database=MYSQL_DB
+		host='localhost',
+		user='root',
+		password='tranha1111',
+		database='suitecrm'
 	)
 
 def export_all_leads_in_Malaysia():
@@ -543,15 +551,15 @@ def get_lead_assigned_user_by_account(name):
 	else:
 		return result
 
-def get_lead_count(sale_id):
+def get_lead_count(date_from, date_to,sale_id):
 	#datetime_object = datetime.strptime(date_from, '%m/%d/%y %H:%M:%S')
 	conn = connect()
 	cursor = conn.cursor()
-	sql = ("SELECT count(*) FROM suitecrm.leads where created_by = %s")
-	cursor.execute(sql, (sale_id,))
+	sql = ("SELECT count(*) FROM suitecrm.leads where created_by = %s and date_entered >= %s and date_entered <= %s")
+	cursor.execute(sql, (sale_id,date_from, date_to,))
 	result = cursor.fetchone()
 	conn.close()
 	if result is None:
 		return ""
 	else:
-		return result
+		return result[0]

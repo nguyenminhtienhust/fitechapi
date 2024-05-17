@@ -34,6 +34,10 @@ class ItemGetLeadCount(BaseModel):
 	date_to: str
 	sale_id : str
 
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
+
 @app.post("/detail/")
 async def item_detail(item: ItemName):
 	if get_item_by_name("tiktok"):
@@ -179,3 +183,7 @@ async def get_lead_assignedId_by_account(item: ItemName):
 		return {"data" : item_id}   
 
 
+@app.get("/lead/getleadcount/")
+async def get_lead_count_by_day(item: ItemGetLeadCount):
+	lead_count = get_lead_count(item.date_from, item.date_to, item.sale_id)
+	return {"lead_count" : lead_count}
