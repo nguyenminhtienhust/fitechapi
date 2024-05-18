@@ -198,11 +198,14 @@ def get_all_dashboard():
  
 	dttoday_str = datetime.today().strftime('%Y-%m-%d')
 	dttoday = datetime.fromisoformat(dttoday_str)
+	dtTo = dttoday + timedelta(1)
 	# ...and to UTC:
-	dtTodaUtc = dttoday.astimezone(timezone.utc)
-	dtTodayUtc_str = dtTodaUtc.strftime("%Y-%m-%d %H:%M:%S")
+	dtTodayUtc = dttoday.astimezone(timezone.utc)
+	dtToUtc = dtTo.astimezone(timezone.utc)
+	dtTodayUtc_str = dtTodayUtc.strftime("%Y-%m-%d %H:%M:%S")
+	dtToUtc_str = dtToUtc.strftime("%Y-%m-%d %H:%M:%S")
 	leadbyday_sql = ("select count(*) from suitecrm.leads where created_by = '6d14a07c-f8d3-d21a-f31c-6592da7f6c30' and deleted = 0 and date_entered >= %s and date_entered <= %s")
-	cursor.execute(leadbyday_sql, (dtTodayUtc_str, dtTodayUtc_str,))
+	cursor.execute(leadbyday_sql, (dtTodayUtc_str, dtTodayUtc_str,dtToUtc_str,))
 	total_by_day_supersale = cursor.fetchone()
 	final_dict["total_by_day_supersale"] = total_by_day_supersale[0]
 
