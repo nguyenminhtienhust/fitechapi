@@ -1,7 +1,7 @@
 import mysql.connector
 from dotenv import load_dotenv
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import calendar
 # Load environment variables
 load_dotenv()
@@ -195,9 +195,15 @@ def get_all_dashboard():
 	cursor.execute(supersale_sql,())
 	total_leads_by_supersale = cursor.fetchone()
 	final_dict["total_leads_by_supersale"] = total_leads_by_supersale[0]
-
-	date_today = datetime.now()
-	month_first_day = date_today.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+ 
+	dttoday = datetime.today()
+	# ...and to UTC:
+	dtTodaytc = dttoday.astimezone(timezone.utc)
+	dtTodayUtc_str = dtTodaytc.strftime("%Y-%m-%d %H:%M:%S")
+	leadbyday_sql = ("select count(*) from suitecrm.leads where created_by = '6d14a07c-f8d3-d21a-f31c-6592da7f6c30' and deleted = 0 and date_entered >= %s and date_entered <= %s")
+	cursor.execute(leadbyday_sql, (dtTodayUtc_str, dtTodayUtc_str,))
+	total_by_day_supersale = cursor.fetchone()
+	final_dict["total_by_day_supersale"] = total_by_day_supersale[0]
 
 	admin_sql = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0")
 	cursor.execute(admin_sql,())
