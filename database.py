@@ -201,7 +201,7 @@ def get_all_dashboard():
 	dtTo = dttoday + timedelta(1)
 	# ...and to UTC:
 	dtTodayUtc = dttoday.astimezone(timezone.utc)
-	dtToUtc = dtTo.astimezone(timezone.utc)
+	dtToUtc = dtTo.astimezone(timezone.utc) - timedelta(seconds=1)
 	dtTodayUtc_str = dtTodayUtc.strftime("%Y-%m-%d %H:%M:%S")
 	dtToUtc_str = dtToUtc.strftime("%Y-%m-%d %H:%M:%S")
 	leadbyday_sql = ("select count(*) from suitecrm.leads where created_by = '6d14a07c-f8d3-d21a-f31c-6592da7f6c30' and deleted = 0 and date_entered >= %s and date_entered <= %s")
