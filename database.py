@@ -266,8 +266,6 @@ def get_this_month_dashboard():
 	last_date_utc = dtTo.astimezone(timezone.utc) - timedelta(seconds=1)
 	#last_date_string = last_date.strftime('%Y-%m-%d')
 	last_date_string = last_date_utc.strftime("%Y-%m-%d %H:%M:%S")
-	print(first_date_string)
-	print(last_date_string)
 	conn = connect()
 	cursor = conn.cursor()
 	sql = ("select * from suitecrm.users where status = 'Active' and id != '6d14a07c-f8d3-d21a-f31c-6592da7f6c30' and is_admin = 'False';")
