@@ -162,6 +162,11 @@ def get_all_dashboard():
 		cursor.execute(assigned_sql,(sale[0],))
 		results_assigned = cursor.fetchone()
 		detail_dict["total_assigned"] = results_assigned[0]
+
+		response_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s and status = 'Response' and deleted = 0")
+		cursor.execute(response_sql,(sale[0],))
+		results_response = cursor.fetchone()
+		detail_dict["total_response"] = results_response[0]
 		
 		inprocess_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s and status = 'In Process' and deleted = 0")
 		cursor.execute(inprocess_sql,(sale[0],))
@@ -290,6 +295,11 @@ def get_this_month_dashboard():
 		cursor.execute(assigned_sql,(sale[0],first_date_string,last_date_string))
 		results_assigned = cursor.fetchone()
 		detail_dict["total_assigned"] = results_assigned[0]
+
+		response_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s and status = 'Response' and deleted = 0")
+		cursor.execute(response_sql,(sale[0],))
+		results_response = cursor.fetchone()
+		detail_dict["total_response"] = results_response[0]
 		
 		inprocess_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s and status = 'In Process' and date_modified >= %s and date_modified <= %s and deleted = 0")
 		cursor.execute(inprocess_sql,(sale[0],first_date_string,last_date_string))
@@ -607,6 +617,11 @@ def get_all_dashboard_by_date(date_from, date_to):
 		cursor.execute(assigned_sql,(sale[0],date_from, date_to,))
 		results_assigned = cursor.fetchone()
 		detail_dict["total_assigned"] = results_assigned[0]
+
+		response_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s and status = 'Response' and deleted = 0")
+		cursor.execute(response_sql,(sale[0],))
+		results_response = cursor.fetchone()
+		detail_dict["total_response"] = results_response[0]
 		
 		inprocess_sql = ("select count(*) from suitecrm.leads where assigned_user_id = %s and status = 'In Process' and deleted = 0 and date_modified >= %s and date_modified <= %s")
 		cursor.execute(inprocess_sql,(sale[0],date_from, date_to,))
