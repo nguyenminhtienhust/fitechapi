@@ -200,20 +200,20 @@ def get_all_dashboard():
 	cursor.execute(supersale_sql,())
 	total_leads_by_supersale = cursor.fetchone()
 	final_dict["total_leads_by_supersale"] = total_leads_by_supersale[0]
-	# supersale_response_count = ("select count(*) from suitecrm.leads where created_by = '6d14a07c-f8d3-d21a-f31c-6592da7f6c30' and deleted = 0 and status = 'Response'" )
-	# cursor.execute(supersale_response_count,())
-	# total_responsed_supersale = cursor.fetchone()
-	# final_dict["total_responsed_supersale"] = total_responsed_supersale[0]
+	supersale_response_count = ("select count(*) from suitecrm.leads where created_by = '6d14a07c-f8d3-d21a-f31c-6592da7f6c30' and deleted = 0 and status = 'Response'" )
+	cursor.execute(supersale_response_count,())
+	total_responsed_supersale = cursor.fetchone()
+	final_dict["total_responsed_supersale"] = total_responsed_supersale[0]
 
 
 	admin_sql = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0")
 	cursor.execute(admin_sql,())
 	total_leads_by_admin = cursor.fetchone()
 	final_dict["total_leads_by_admin"] = total_leads_by_admin[0]
-	# admin_response_count = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0 and status = 'Response'" )
-	# cursor.execute(admin_response_count,())
-	# total_responsed_admin = cursor.fetchone()
-	# final_dict["total_responsed_admin"] = total_responsed_admin[0]
+	admin_response_count = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0 and status = 'Response'" )
+	cursor.execute(admin_response_count,())
+	total_responsed_admin = cursor.fetchone()
+	final_dict["total_responsed_admin"] = total_responsed_admin[0]
 
 	new_sql = ("select count(*) from suitecrm.leads where status = 'New' and deleted = 0")
 	cursor.execute(new_sql,())
@@ -329,19 +329,19 @@ def get_this_month_dashboard():
 	cursor.execute(supersale_sql,(first_date_string,last_date_string,))
 	total_leads_by_supersale = cursor.fetchone()
 	final_dict["total_leads_by_supersale"] = total_leads_by_supersale[0]
-	# supersale_response_count = ("select count(*) from suitecrm.leads where created_by = '6d14a07c-f8d3-d21a-f31c-6592da7f6c30' and date_entered >= %s and date_entered <= %s and deleted = 0 and status = 'Response'" )
-	# cursor.execute(supersale_response_count,())
-	# total_responsed_supersale = cursor.fetchone()
-	# final_dict["total_responsed_supersale"] = total_responsed_supersale[0]
+	supersale_response_count = ("select count(*) from suitecrm.leads where created_by = '6d14a07c-f8d3-d21a-f31c-6592da7f6c30' and date_entered >= %s and date_entered <= %s and deleted = 0 and status = 'Response'" )
+	cursor.execute(supersale_response_count,(first_date_string,last_date_string))
+	total_responsed_supersale = cursor.fetchone()
+	final_dict["total_responsed_supersale"] = total_responsed_supersale[0]
 
 	admin_sql = ("select count(*) from suitecrm.leads where created_by = '1' and date_entered >= %s and date_entered <= %s and deleted = 0")
 	cursor.execute(admin_sql,(first_date_string,last_date_string))
 	total_leads_by_admin = cursor.fetchone()
 	final_dict["total_leads_by_admin"] = total_leads_by_admin[0]
-	# admin_response_count = ("select count(*) from suitecrm.leads where created_by = '1' and date_entered >= %s and date_entered <= %s and deleted = 0 and status = 'Response'" )
-	# cursor.execute(admin_response_count,())
-	# total_responsed_admin = cursor.fetchone()
-	# final_dict["total_responsed_admin"] = total_responsed_admin[0]
+	admin_response_count = ("select count(*) from suitecrm.leads where created_by = '1' and date_entered >= %s and date_entered <= %s and deleted = 0 and status = 'Response'" )
+	cursor.execute(admin_response_count,(first_date_string,last_date_string))
+	total_responsed_admin = cursor.fetchone()
+	final_dict["total_responsed_admin"] = total_responsed_admin[0]
 
 	new_sql = ("select count(*) from suitecrm.leads where status = 'New' and date_entered >= %s and date_entered <= %s and deleted = 0")
 	cursor.execute(new_sql,(first_date_string,last_date_string))
@@ -659,19 +659,19 @@ def get_all_dashboard_by_date(date_from, date_to):
 	cursor.execute(supersale_sql,(date_from, date_to))
 	total_leads_by_supersale = cursor.fetchone()
 	final_dict["total_leads_by_supersale"] = total_leads_by_supersale[0]
-	# supersale_response_count = ("select count(*) from suitecrm.leads where created_by = '6d14a07c-f8d3-d21a-f31c-6592da7f6c30' and date_entered >= %s and date_entered <= %s and deleted = 0 and status = 'Response'" )
-	# cursor.execute(supersale_response_count,())
-	# total_responsed_supersale = cursor.fetchone()
-	# final_dict["total_responsed_supersale"] = total_responsed_supersale[0]
+	supersale_response_count = ("select count(*) from suitecrm.leads where created_by = '6d14a07c-f8d3-d21a-f31c-6592da7f6c30' and date_entered >= %s and date_entered <= %s and deleted = 0 and status = 'Response'" )
+	cursor.execute(supersale_response_count,(date_from, date_to))
+	total_responsed_supersale = cursor.fetchone()
+	final_dict["total_responsed_supersale"] = total_responsed_supersale[0]
 
 	admin_sql = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0 and date_entered >= %s and date_entered <= %s")
 	cursor.execute(admin_sql,(date_from, date_to))
 	total_leads_by_admin = cursor.fetchone()
 	final_dict["total_leads_by_admin"] = total_leads_by_admin[0]
-	# admin_response_count = ("select count(*) from suitecrm.leads where created_by = '1' and date_entered >= %s and date_entered <= %s and deleted = 0 and status = 'Response'" )
-	# cursor.execute(admin_response_count,())
-	# total_responsed_admin = cursor.fetchone()
-	# final_dict["total_responsed_admin"] = total_responsed_admin[0]
+	admin_response_count = ("select count(*) from suitecrm.leads where created_by = '1' and date_entered >= %s and date_entered <= %s and deleted = 0 and status = 'Response'" )
+	cursor.execute(admin_response_count,(date_from, date_to))
+	total_responsed_admin = cursor.fetchone()
+	final_dict["total_responsed_admin"] = total_responsed_admin[0]
 
 	new_sql = ("select count(*) from suitecrm.leads where status = 'New' and deleted = 0 and date_entered >= %s and date_entered <= %s")
 	cursor.execute(new_sql,(date_from, date_to))
