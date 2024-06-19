@@ -3,6 +3,8 @@ from dotenv import load_dotenv
 import os
 from datetime import datetime, timedelta, timezone
 import calendar
+import requests
+import time
 # Load environment variables
 load_dotenv()
 
@@ -214,6 +216,9 @@ def get_all_dashboard():
 	cursor.execute(admin_response_count,())
 	total_responsed_admin = cursor.fetchone()
 	final_dict["total_responsed_admin"] = total_responsed_admin[0]
+	mess_count = get_num_mess_sent_lead("","")
+	final_dict["total_mess_sent_lead_admin"] = mess_count["sent_count"]
+	final_dict["total_mess_res_lead_admin"] = mess_count["res_count"]
 
 	new_sql = ("select count(*) from suitecrm.leads where status = 'New' and deleted = 0")
 	cursor.execute(new_sql,())
@@ -342,6 +347,9 @@ def get_this_month_dashboard():
 	cursor.execute(admin_response_count,(first_date_string,last_date_string))
 	total_responsed_admin = cursor.fetchone()
 	final_dict["total_responsed_admin"] = total_responsed_admin[0]
+	mess_count = get_num_mess_sent_lead(first_date_string,last_date_string)
+	final_dict["total_mess_sent_lead_admin"] = mess_count["sent_count"]
+	final_dict["total_mess_res_lead_admin"] = mess_count["res_count"]
 
 	new_sql = ("select count(*) from suitecrm.leads where status = 'New' and date_entered >= %s and date_entered <= %s and deleted = 0")
 	cursor.execute(new_sql,(first_date_string,last_date_string))
@@ -672,6 +680,9 @@ def get_all_dashboard_by_date(date_from, date_to):
 	cursor.execute(admin_response_count,(date_from, date_to))
 	total_responsed_admin = cursor.fetchone()
 	final_dict["total_responsed_admin"] = total_responsed_admin[0]
+	mess_count = get_num_mess_sent_lead(date_from,date_to)
+	final_dict["total_mess_sent_lead_admin"] = mess_count["sent_count"]
+	final_dict["total_mess_res_lead_admin"] = mess_count["res_count"]
 
 	new_sql = ("select count(*) from suitecrm.leads where status = 'New' and deleted = 0 and date_entered >= %s and date_entered <= %s")
 	cursor.execute(new_sql,(date_from, date_to))
@@ -704,3 +715,51 @@ def get_all_dashboard_by_date(date_from, date_to):
 	final_dict["total_dead"] = results_dead[0]
 
 	return {"data":final_dict}
+
+def login_crm():
+	headers = {'Content-Type': "application/json", 'Accept': "application/json"}
+	jsondata = {}
+	login_api = "https://crm.fitech.com.vn/Api/access_token"
+	
+	jsondata["grant_type"] = "client_credentials"
+	jsondata["client_id"] = "ccfd00e1-307e-e56f-1e06-6592d6c95397"
+	jsondata["client_secret"] = "apiuser@Fitech#vn"
+	print(type(jsondata))
+	data = requests.post(login_api,json=jsondata,headers=headers)
+	if data.status_code != 200:
+		print(data.status_code)
+		print(data.reason)
+	else:
+		json_object = data.json()
+		return json_object["access_token"]
+
+def get_num_mess_sent_lead(date_from, date_to):
+	access_token = login_crm()
+	sent_count = 0
+	res_count = 0
+	headers = {'Content-Type': "application/json", 'Accept': "application/json", "Authorization": "Bearer " + access_token}
+	sent_sql = "https://crm.fitech.com.vn/Api/V8/module/Leads?filter[mess_sent_c][eq]=1"
+	if(date_from != ""):
+		sent_sql = "https://crm.fitech.com.vn/Api/V8/module/Leads?filter[mess_sent_c][eq]=1&filter[date_entered][GTE]=" + date_from + "&filter[date_entered][LTE]=" + date_to
+	sent_data = requests.get(sent_sql,headers=headers)
+	time.sleep(2)
+	if sent_data.status_code != 200:
+		print(sent_data.status_code)
+		print(sent_data.reason)
+		sent_count = -1
+	else:
+		json_object = sent_data.json()
+		sent_count = len(json_object["data"])
+	res_sql = "https://crm.fitech.com.vn/Api/V8/module/Leads?filter[mess_sent_c][eq]=1&filter[status][eq]=Response"
+	if(date_from != ""):
+		res_sql = "https://crm.fitech.com.vn/Api/V8/module/Leads?filter[mess_sent_c][eq]=1&filter[date_entered][GTE]=" + date_from + "&filter[date_entered][LTE]=" + date_to + "&filter[status][eq]=Response"
+	res_data = requests.get(res_sql,headers=headers)
+	time.sleep(2)
+	if res_data.status_code != 200:
+		print(res_data.status_code)
+		print(res_data.reason)
+		res_count = -1
+	else:
+		json_object = res_data.json()
+		res_count = len(json_object["data"])
+	return {"sent_count" : sent_count, "res_count": res_count} 
