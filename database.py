@@ -215,7 +215,15 @@ def get_all_dashboard():
 	admin_response_count = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0 and status = 'Response'" )
 	cursor.execute(admin_response_count,())
 	total_responsed_admin = cursor.fetchone()
-	final_dict["total_responsed_admin"] = total_responsed_admin[0]
+	final_dict["total_responsed_admin"] = total_responsed_admin[0] 
+	admin_mess_sent_count = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0 and status_description LIKE '%message%'" )
+	cursor.execute(admin_mess_sent_count,())
+	total_mess_sent_lead_admin = cursor.fetchone()
+	final_dict["total_mess_sent_lead_admin"] = total_mess_sent_lead_admin[0] 
+	admin_res_count = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0 and (status_description LIKE '%yes%' or status = 'Response'" )
+	cursor.execute(admin_res_count,())
+	total_mess_res_lead_admin = cursor.fetchone()
+	final_dict["total_mess_res_lead_admin"] = total_mess_res_lead_admin[0] 
 	# mess_count = get_num_mess_sent_lead("","")
 	# final_dict["total_mess_sent_lead_admin"] = mess_count["sent_count"]
 	# final_dict["total_mess_res_lead_admin"] = mess_count["res_count"]
@@ -347,6 +355,14 @@ def get_this_month_dashboard():
 	cursor.execute(admin_response_count,(first_date_string,last_date_string))
 	total_responsed_admin = cursor.fetchone()
 	final_dict["total_responsed_admin"] = total_responsed_admin[0]
+	admin_mess_sent_count = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0 and date_entered >= %s and date_entered <= %s and status_description LIKE '%message%'" )
+	cursor.execute(admin_mess_sent_count,(first_date_string,last_date_string))
+	total_mess_sent_lead_admin = cursor.fetchone()
+	final_dict["total_mess_sent_lead_admin"] = total_mess_sent_lead_admin[0] 
+	admin_res_count = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0 and and date_modified >= %s and date_modified <= %s and (status_description LIKE '%yes%' or status = 'Response'" )
+	cursor.execute(admin_res_count,(first_date_string,last_date_string))
+	total_mess_res_lead_admin = cursor.fetchone()
+	final_dict["total_mess_res_lead_admin"] = total_mess_res_lead_admin[0] 
 	# mess_count = get_num_mess_sent_lead(first_date_string,last_date_string)
 	# final_dict["total_mess_sent_lead_admin"] = mess_count["sent_count"]
 	# final_dict["total_mess_res_lead_admin"] = mess_count["res_count"]
@@ -680,6 +696,14 @@ def get_all_dashboard_by_date(date_from, date_to):
 	cursor.execute(admin_response_count,(date_from, date_to))
 	total_responsed_admin = cursor.fetchone()
 	final_dict["total_responsed_admin"] = total_responsed_admin[0]
+	admin_mess_sent_count = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0 and date_entered >= %s and date_entered <= %s and status_description LIKE '%message%'" )
+	cursor.execute(admin_mess_sent_count,(date_from, date_to))
+	total_mess_sent_lead_admin = cursor.fetchone()
+	final_dict["total_mess_sent_lead_admin"] = total_mess_sent_lead_admin[0] 
+	admin_res_count = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0 and and date_modified >= %s and date_modified <= %s and (status_description LIKE '%yes%' or status = 'Response'" )
+	cursor.execute(admin_res_count,(date_from, date_to))
+	total_mess_res_lead_admin = cursor.fetchone()
+	final_dict["total_mess_res_lead_admin"] = total_mess_res_lead_admin[0] 
 	# mess_count = get_num_mess_sent_lead(date_from,date_to)
 	# final_dict["total_mess_sent_lead_admin"] = mess_count["sent_count"]
 	# final_dict["total_mess_res_lead_admin"] = mess_count["res_count"]
