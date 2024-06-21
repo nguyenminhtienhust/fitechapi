@@ -216,7 +216,7 @@ def get_all_dashboard():
 	cursor.execute(admin_response_count,())
 	total_responsed_admin = cursor.fetchone()
 	final_dict["total_responsed_admin"] = total_responsed_admin[0] 
-	admin_mess_sent_count = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0 and status_description LIKE '%message%'" )
+	admin_mess_sent_count = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0 and status_description LIKE '%AdminAccount%'" )
 	cursor.execute(admin_mess_sent_count,())
 	total_mess_sent_lead_admin = cursor.fetchone()
 	final_dict["total_mess_sent_lead_admin"] = total_mess_sent_lead_admin[0] 
@@ -355,7 +355,7 @@ def get_this_month_dashboard():
 	cursor.execute(admin_response_count,(first_date_string,last_date_string))
 	total_responsed_admin = cursor.fetchone()
 	final_dict["total_responsed_admin"] = total_responsed_admin[0]
-	admin_mess_sent_count = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0 and date_entered >= %s and date_entered <= %s and status_description LIKE '%message%'" )
+	admin_mess_sent_count = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0 and date_entered >= %s and date_entered <= %s and status_description LIKE '%AdminAccount%'" )
 	cursor.execute(admin_mess_sent_count,(first_date_string,last_date_string))
 	total_mess_sent_lead_admin = cursor.fetchone()
 	final_dict["total_mess_sent_lead_admin"] = total_mess_sent_lead_admin[0] 
@@ -696,7 +696,7 @@ def get_all_dashboard_by_date(date_from, date_to):
 	cursor.execute(admin_response_count,(date_from, date_to))
 	total_responsed_admin = cursor.fetchone()
 	final_dict["total_responsed_admin"] = total_responsed_admin[0]
-	admin_mess_sent_count = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0 and date_entered >= %s and date_entered <= %s and status_description LIKE '%message%'" )
+	admin_mess_sent_count = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0 and date_entered >= %s and date_entered <= %s and status_description LIKE '%AdminAccount%'" )
 	cursor.execute(admin_mess_sent_count,(date_from, date_to))
 	total_mess_sent_lead_admin = cursor.fetchone()
 	final_dict["total_mess_sent_lead_admin"] = total_mess_sent_lead_admin[0] 
