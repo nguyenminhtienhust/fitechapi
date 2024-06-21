@@ -14,21 +14,21 @@ MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD")
 MYSQL_DB = os.getenv("MYSQL_DB")
 
 # Connect to MySQL
-def connect():
-	return mysql.connector.connect(
-		host=MYSQL_HOST,
-		user=MYSQL_USER,
-		password=MYSQL_PASSWORD,
-		database=MYSQL_DB
-	)
-
 # def connect():
 # 	return mysql.connector.connect(
-# 		host='localhost',
-# 		user='root',
-# 		password='tranha1111',
-# 		database='suitecrm'
+# 		host=MYSQL_HOST,
+# 		user=MYSQL_USER,
+# 		password=MYSQL_PASSWORD,
+# 		database=MYSQL_DB
 # 	)
+
+def connect():
+	return mysql.connector.connect(
+		host='localhost',
+		user='root',
+		password='tranha1111',
+		database='suitecrm'
+	)
 
 def export_all_leads_in_Malaysia():
 	conn = connect()
@@ -220,7 +220,7 @@ def get_all_dashboard():
 	cursor.execute(admin_mess_sent_count,())
 	total_mess_sent_lead_admin = cursor.fetchone()
 	final_dict["total_mess_sent_lead_admin"] = total_mess_sent_lead_admin[0] 
-	admin_res_count = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0 and (status_description LIKE '%yes%' or status = 'Response'" )
+	admin_res_count = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0 and (status_description LIKE '%yes%' or status = 'Response')" )
 	cursor.execute(admin_res_count,())
 	total_mess_res_lead_admin = cursor.fetchone()
 	final_dict["total_mess_res_lead_admin"] = total_mess_res_lead_admin[0] 
@@ -359,7 +359,7 @@ def get_this_month_dashboard():
 	cursor.execute(admin_mess_sent_count,(first_date_string,last_date_string))
 	total_mess_sent_lead_admin = cursor.fetchone()
 	final_dict["total_mess_sent_lead_admin"] = total_mess_sent_lead_admin[0] 
-	admin_res_count = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0 and and date_modified >= %s and date_modified <= %s and (status_description LIKE '%yes%' or status = 'Response'" )
+	admin_res_count = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0 and and date_modified >= %s and date_modified <= %s and (status_description LIKE '%yes%' or status = 'Response')" )
 	cursor.execute(admin_res_count,(first_date_string,last_date_string))
 	total_mess_res_lead_admin = cursor.fetchone()
 	final_dict["total_mess_res_lead_admin"] = total_mess_res_lead_admin[0] 
@@ -700,7 +700,7 @@ def get_all_dashboard_by_date(date_from, date_to):
 	cursor.execute(admin_mess_sent_count,(date_from, date_to))
 	total_mess_sent_lead_admin = cursor.fetchone()
 	final_dict["total_mess_sent_lead_admin"] = total_mess_sent_lead_admin[0] 
-	admin_res_count = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0 and and date_modified >= %s and date_modified <= %s and (status_description LIKE '%yes%' or status = 'Response'" )
+	admin_res_count = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0 and and date_modified >= %s and date_modified <= %s and (status_description LIKE '%yes%' or status = 'Response')" )
 	cursor.execute(admin_res_count,(date_from, date_to))
 	total_mess_res_lead_admin = cursor.fetchone()
 	final_dict["total_mess_res_lead_admin"] = total_mess_res_lead_admin[0] 
