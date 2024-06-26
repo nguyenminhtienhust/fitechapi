@@ -56,7 +56,7 @@ async def leads():
 async def check_leads(item: ItemLead):
 	item_id = get_item_by_name(item.title, item.last_name, item.first_name)
 	if item_id == "":
-		return {"data" : "", "status" : "", "phone_work" : "", "phone_mobile": "", "phone_other": ""}
+		return {"data" : "", "status" : "", "phone_work" : "", "phone_mobile": "", "phone_other": "", "website" : "", "assigned_user": ""}
 	else:
 		phone_work = ""
 		if item_id[17] is not None:
