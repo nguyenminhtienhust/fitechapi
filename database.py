@@ -814,14 +814,12 @@ def get_num_mess_sent_lead(date_from, date_to):
 
 
 def get_email_exist(email):
-	print('email' + email)
 	#datetime_object = datetime.strptime(date_from, '%m/%d/%y %H:%M:%S')
 	conn = connect()
 	cursor = conn.cursor()
 	sql_get_email = ("SELECT id FROM suitecrm.email_addresses where email_address = %s and deleted = 0")
 	cursor.execute(sql_get_email, (email,))
 	email_id = cursor.fetchone()
-	print('email_id' + email_id[0])
 	if email_id is None:
 		conn.close()
 		return 0
