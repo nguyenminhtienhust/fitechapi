@@ -199,5 +199,4 @@ async def get_dashboard_by_date(item : ItemDashBoardByDate):
 @app.get("/getactivelead")
 async def get_active_lead(item : ItemName):
 	lead_count = get_email_exist(item.name)
-	print(lead_count)
-	return lead_count
+	return {"email_expired" : lead_count}
