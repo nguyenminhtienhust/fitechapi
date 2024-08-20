@@ -826,7 +826,7 @@ def get_email_exist(email):
 	else:
 		query_date = datetime.today() + timedelta(-30)
 		query_date_string = query_date.strftime("%Y-%m-%d %H:%M:%S")
-		sql = ("SELECT count(*) from suitecrm.leads where id in (SELECT bean_id from suitecrm.email_addr_bean_rel where email_address_id = %s) and date_entered > %s")
+		sql = ("SELECT count(*) from suitecrm.leads where id in (SELECT bean_id from suitecrm.email_addr_bean_rel where email_address_id = %s) and date_entered > %s and assigned_user_id is not Null and assigned_user_id <> '' ")
 		cursor.execute(sql, (email_id[0],query_date_string,))
 		lead_count = cursor.fetchone()
 		conn.close()
