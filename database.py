@@ -811,3 +811,25 @@ def get_num_mess_sent_lead(date_from, date_to):
 		json_object = res_data.json()
 		res_count = len(json_object["data"])
 	return {"sent_count" : sent_count, "res_count": res_count} 
+
+
+def get_email_exist(email):
+	print('email' + email)
+	#datetime_object = datetime.strptime(date_from, '%m/%d/%y %H:%M:%S')
+	conn = connect()
+	cursor = conn.cursor()
+	sql_get_email = ("SELECT id FROM suitecrm.email_addresses where email_address = %s and deleted = 0")
+	cursor.execute(sql_get_email, (email,))
+	email_id = cursor.fetchone()
+	print('email_id' + email_id[0])
+	if email_id is None:
+		conn.close()
+		return 0
+	else:
+		query_date = datetime.today() + timedelta(-30)
+		query_date_string = query_date.strftime("%Y-%m-%d %H:%M:%S")
+		sql = ("SELECT count(*) from suitecrm.leads where id in (SELECT bean_id from suitecrm.email_addr_bean_rel where email_address_id = %s) and date_entered > %s")
+		cursor.execute(sql, (email_id[0],query_date_string,))
+		lead_count = cursor.fetchone()
+		conn.close()
+		return lead_count[0]
