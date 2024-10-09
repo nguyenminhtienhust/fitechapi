@@ -1,7 +1,7 @@
 import mysql.connector
 from dotenv import load_dotenv
 import os
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone, date
 import calendar
 import requests
 import time
@@ -831,3 +831,43 @@ def get_email_exist(email):
 		lead_count = cursor.fetchone()
 		conn.close()
 		return lead_count[0]
+	
+
+def get_performance_report():
+	current_month = datetime.now().month
+	current_year = datetime.now().year
+	month = 1
+	conn = connect()
+	cursor = conn.cursor()
+	detail_list = []
+	while month <= current_month:
+		detail_dict = {"month":month}
+		number_day_per_month = calendar.monthrange(current_year, month)
+		first_date = date(current_year, month, 1)
+		first_date_str = first_date.strftime('%Y-%m-%d')
+		dtfrom = datetime.fromisoformat(first_date_str)
+		first_date_utc = dtfrom.astimezone(timezone.utc)
+		first_date_string = first_date_utc.strftime("%Y-%m-%d %H:%M:%S")
+		print(first_date_string)
+		last_date = first_date.replace(day=number_day_per_month[1])
+		last_date_str = last_date.strftime('%Y-%m-%d')
+		dtTo = datetime.fromisoformat(last_date_str) + timedelta(1)
+		last_date_utc = dtTo.astimezone(timezone.utc) - timedelta(seconds=1)
+		last_date_string = last_date_utc.strftime("%Y-%m-%d %H:%M:%S")
+		print(last_date_string)
+		sql_total = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered <= %s"
+		cursor.execute(sql_total,(first_date_string,last_date_string))
+		total_leads = cursor.fetchone()
+		detail_dict["total_lead"] = total_leads[0]
+		sql_total_contact = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered <= %s and (status_description LIKE '%AdminAccount%' or status in ('Assigned', 'Response') )"
+		cursor.execute(sql_total_contact,(first_date_string,last_date_string))
+		total_leads_contact = cursor.fetchone()
+		detail_dict["total_lead_contact"] = total_leads_contact[0]
+		if(detail_dict["total_lead"] != 0):
+			detail_dict["contact_rate"] = detail_dict["total_lead_contact"]/detail_dict["total_lead"]
+		else:
+			detail_dict["contact_rate"] = 0
+		detail_list.append(detail_dict)
+		month = month + 1
+	final_dict = {"report": detail_list}
+	return final_dict
