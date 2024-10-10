@@ -833,57 +833,104 @@ def get_email_exist(email):
 		return lead_count[0]
 	
 
-def get_performance_report():
+def get_performance_report(saleMember):
 	current_month = datetime.now().month
 	current_year = datetime.now().year
 	month = 1
 	conn = connect()
 	cursor = conn.cursor()
 	detail_list = []
-	while month <= current_month:
-		detail_dict = {"month":month}
-		number_day_per_month = calendar.monthrange(current_year, month)
-		first_date = date(current_year, month, 1)
-		first_date_str = first_date.strftime('%Y-%m-%d')
-		dtfrom = datetime.fromisoformat(first_date_str)
-		first_date_utc = dtfrom.astimezone(timezone.utc)
-		first_date_string = first_date_utc.strftime("%Y-%m-%d %H:%M:%S")
-		print(first_date_string)
-		last_date = first_date.replace(day=number_day_per_month[1])
-		last_date_str = last_date.strftime('%Y-%m-%d')
-		dtTo = datetime.fromisoformat(last_date_str) + timedelta(1)
-		last_date_utc = dtTo.astimezone(timezone.utc) - timedelta(seconds=1)
-		last_date_string = last_date_utc.strftime("%Y-%m-%d %H:%M:%S")
-		print(last_date_string)
-		sql_total = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered <= %s"
-		cursor.execute(sql_total,(first_date_string,last_date_string))
-		total_leads = cursor.fetchone()
-		detail_dict["total_lead"] = total_leads[0]
-		sql_total_contact = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered <= %s and (status_description LIKE '%AdminAccount%' or status in ('Assigned', 'Response','In Process','Converted') )"
-		cursor.execute(sql_total_contact,(first_date_string,last_date_string))
-		total_leads_contact = cursor.fetchone()
-		detail_dict["total_lead_contact"] = total_leads_contact[0]
-		if(detail_dict["total_lead"] != 0):
-			detail_dict["contact_rate"] = detail_dict["total_lead_contact"]/detail_dict["total_lead"]
-		else:
-			detail_dict["contact_rate"] = 'NaN'
-		sql_replied_count = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered <= %s and (status in ('Response','In Process','Converted') or status_description LIKE '%yes%' )"
-		cursor.execute(sql_replied_count,(first_date_string,last_date_string))
-		total_replied_contact = cursor.fetchone()
-		detail_dict["total_replied_contact"] = total_replied_contact[0]
-		if(detail_dict["total_lead_contact"] != 0):
-			detail_dict["replied_rate"] = detail_dict["total_replied_contact"]/detail_dict["total_lead_contact"]
-		else:
-			detail_dict["replied_rate"] = 'NaN'
-		sql_meeting_count = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered <= %s and id in (select parent_id from meetings)"
-		cursor.execute(sql_meeting_count,(first_date_string,last_date_string))
-		total_meeting = cursor.fetchone()
-		detail_dict["total_meeting"] = total_meeting[0]
-		if(detail_dict["total_lead_contact"] != 0):
-			detail_dict["meeting_rate"] = detail_dict["total_meeting"]/detail_dict["total_lead_contact"]
-		else:
-			detail_dict["meeting_rate"] = 'NaN'
-		detail_list.append(detail_dict)
-		month = month + 1
-	final_dict = {"report": detail_list}
-	return final_dict
+	if saleMember:
+		where_sql = " and assigned_user_id = %s"
+		while month <= current_month:
+			detail_dict = {"month":month}
+			number_day_per_month = calendar.monthrange(current_year, month)
+			first_date = date(current_year, month, 1)
+			first_date_str = first_date.strftime('%Y-%m-%d')
+			dtfrom = datetime.fromisoformat(first_date_str)
+			first_date_utc = dtfrom.astimezone(timezone.utc)
+			first_date_string = first_date_utc.strftime("%Y-%m-%d %H:%M:%S")
+			last_date = first_date.replace(day=number_day_per_month[1])
+			last_date_str = last_date.strftime('%Y-%m-%d')
+			dtTo = datetime.fromisoformat(last_date_str) + timedelta(1)
+			last_date_utc = dtTo.astimezone(timezone.utc) - timedelta(seconds=1)
+			last_date_string = last_date_utc.strftime("%Y-%m-%d %H:%M:%S")
+			sql_total = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered <= %s" + where_sql
+			cursor.execute(sql_total,(first_date_string,last_date_string,saleMember)) 
+			total_leads = cursor.fetchone()
+			detail_dict["total_lead"] = total_leads[0]
+			sql_total_contact = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered <= %s and (status_description LIKE '%AdminAccount%' or status in ('Assigned', 'Response','In Process','Converted') )" + where_sql
+			cursor.execute(sql_total_contact,(first_date_string,last_date_string,saleMember))
+			total_leads_contact = cursor.fetchone()
+			detail_dict["total_lead_contact"] = total_leads_contact[0]
+			if(detail_dict["total_lead"] != 0):
+				detail_dict["contact_rate"] = detail_dict["total_lead_contact"]/detail_dict["total_lead"]
+			else:
+				detail_dict["contact_rate"] = 'NaN'
+			sql_replied_count = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered <= %s and (status in ('Response','In Process','Converted') or status_description LIKE '%yes%' )" + where_sql
+			cursor.execute(sql_replied_count,(first_date_string,last_date_string,saleMember))
+			total_replied_contact = cursor.fetchone()
+			detail_dict["total_replied_contact"] = total_replied_contact[0]
+			if(detail_dict["total_lead_contact"] != 0):
+				detail_dict["replied_rate"] = detail_dict["total_replied_contact"]/detail_dict["total_lead_contact"]
+			else:
+				detail_dict["replied_rate"] = 'NaN'
+			sql_meeting_count = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered <= %s and id in (select parent_id from meetings)" + where_sql
+			cursor.execute(sql_meeting_count,(first_date_string,last_date_string,saleMember))
+			total_meeting = cursor.fetchone()
+			detail_dict["total_meeting"] = total_meeting[0]
+			if(detail_dict["total_lead_contact"] != 0):
+				detail_dict["meeting_rate"] = detail_dict["total_meeting"]/detail_dict["total_lead_contact"]
+			else:
+				detail_dict["meeting_rate"] = 'NaN'
+			detail_list.append(detail_dict)
+			month = month + 1
+		final_dict = {"report": detail_list}
+		return final_dict
+	else:
+		while month <= current_month:
+			detail_dict = {"month":month}
+			number_day_per_month = calendar.monthrange(current_year, month)
+			first_date = date(current_year, month, 1)
+			first_date_str = first_date.strftime('%Y-%m-%d')
+			dtfrom = datetime.fromisoformat(first_date_str)
+			first_date_utc = dtfrom.astimezone(timezone.utc)
+			first_date_string = first_date_utc.strftime("%Y-%m-%d %H:%M:%S")
+			last_date = first_date.replace(day=number_day_per_month[1])
+			last_date_str = last_date.strftime('%Y-%m-%d')
+			dtTo = datetime.fromisoformat(last_date_str) + timedelta(1)
+			last_date_utc = dtTo.astimezone(timezone.utc) - timedelta(seconds=1)
+			last_date_string = last_date_utc.strftime("%Y-%m-%d %H:%M:%S")
+			sql_total = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered <= %s"
+			cursor.execute(sql_total,(first_date_string,last_date_string))
+			total_leads = cursor.fetchone()
+			detail_dict["total_lead"] = total_leads[0]
+			sql_total_contact = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered <= %s and (status_description LIKE '%AdminAccount%' or status in ('Assigned', 'Response','In Process','Converted') )"
+			cursor.execute(sql_total_contact,(first_date_string,last_date_string))
+			total_leads_contact = cursor.fetchone()
+			detail_dict["total_lead_contact"] = total_leads_contact[0]
+			if(detail_dict["total_lead"] != 0):
+				detail_dict["contact_rate"] = detail_dict["total_lead_contact"]/detail_dict["total_lead"]
+			else:
+				detail_dict["contact_rate"] = 'NaN'
+			sql_replied_count = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered <= %s and (status in ('Response','In Process','Converted') or status_description LIKE '%yes%' )" 
+			cursor.execute(sql_replied_count,(first_date_string,last_date_string))
+			total_replied_contact = cursor.fetchone()
+			detail_dict["total_replied_contact"] = total_replied_contact[0]
+			if(detail_dict["total_lead_contact"] != 0):
+				detail_dict["replied_rate"] = detail_dict["total_replied_contact"]/detail_dict["total_lead_contact"]
+			else:
+				detail_dict["replied_rate"] = 'NaN'
+			sql_meeting_count = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered <= %s and id in (select parent_id from meetings)" 
+			cursor.execute(sql_meeting_count,(first_date_string,last_date_string))
+			total_meeting = cursor.fetchone()
+			detail_dict["total_meeting"] = total_meeting[0]
+			if(detail_dict["total_lead_contact"] != 0):
+				detail_dict["meeting_rate"] = detail_dict["total_meeting"]/detail_dict["total_lead_contact"]
+			else:
+				detail_dict["meeting_rate"] = 'NaN'
+			detail_list.append(detail_dict)
+			month = month + 1
+		final_dict = {"report": detail_list}
+		return final_dict
+	

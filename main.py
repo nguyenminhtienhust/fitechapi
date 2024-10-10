@@ -202,6 +202,6 @@ async def get_active_lead(item : ItemName):
 	return {"email_expired" : lead_count}
 
 @app.get("/getperformancereport")
-async def performance_report():
-	data = get_performance_report()
+async def performance_report(item : ItemName):
+	data = get_performance_report(item.name)
 	return data
