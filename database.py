@@ -859,14 +859,30 @@ def get_performance_report():
 		cursor.execute(sql_total,(first_date_string,last_date_string))
 		total_leads = cursor.fetchone()
 		detail_dict["total_lead"] = total_leads[0]
-		sql_total_contact = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered <= %s and (status_description LIKE '%AdminAccount%' or status in ('Assigned', 'Response') )"
+		sql_total_contact = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered <= %s and (status_description LIKE '%AdminAccount%' or status in ('Assigned', 'Response','In Process','Converted') )"
 		cursor.execute(sql_total_contact,(first_date_string,last_date_string))
 		total_leads_contact = cursor.fetchone()
 		detail_dict["total_lead_contact"] = total_leads_contact[0]
 		if(detail_dict["total_lead"] != 0):
 			detail_dict["contact_rate"] = detail_dict["total_lead_contact"]/detail_dict["total_lead"]
 		else:
-			detail_dict["contact_rate"] = 0
+			detail_dict["contact_rate"] = 'NaN'
+		sql_replied_count = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered <= %s and (status in ('Response','In Process','Converted') or status_description LIKE '%yes%' )"
+		cursor.execute(sql_replied_count,(first_date_string,last_date_string))
+		total_replied_contact = cursor.fetchone()
+		detail_dict["total_replied_contact"] = total_replied_contact[0]
+		if(detail_dict["total_lead_contact"] != 0):
+			detail_dict["replied_rate"] = detail_dict["total_replied_contact"]/detail_dict["total_lead_contact"]
+		else:
+			detail_dict["replied_rate"] = 'NaN'
+		sql_meeting_count = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered <= %s and id in (select parent_id from meetings)"
+		cursor.execute(sql_meeting_count,(first_date_string,last_date_string))
+		total_meeting = cursor.fetchone()
+		detail_dict["total_meeting"] = total_meeting[0]
+		if(detail_dict["total_lead_contact"] != 0):
+			detail_dict["meeting_rate"] = detail_dict["total_meeting"]/detail_dict["total_lead_contact"]
+		else:
+			detail_dict["meeting_rate"] = 'NaN'
 		detail_list.append(detail_dict)
 		month = month + 1
 	final_dict = {"report": detail_list}
