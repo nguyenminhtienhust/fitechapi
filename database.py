@@ -905,12 +905,20 @@ def get_performance_report(saleMember):
 			cursor.execute(sql_total,(first_date_string,last_date_string))
 			total_leads = cursor.fetchone()
 			detail_dict["total_lead"] = total_leads[0]
+			sql_total_assigned = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered <= %s and (assigned_user_id is not null or assigned_user_id <> '')"
+			cursor.execute(sql_total_assigned,(first_date_string,last_date_string))
+			total_leads_assigned = cursor.fetchone()
+			detail_dict["total_leads_assigned"] = total_leads_assigned[0]
+			if(detail_dict["total_lead"] != 0):
+				detail_dict["assigned_rate"] = round((detail_dict["total_leads_assigned"]/detail_dict["total_lead"])*100,3)
+			else:
+				detail_dict["assigned_rate"] = 'NaN'
 			sql_total_contact = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered <= %s and (status_description LIKE '%AdminAccount%' or status in ('Assigned', 'Response','In Process','Converted') )"
 			cursor.execute(sql_total_contact,(first_date_string,last_date_string))
 			total_leads_contact = cursor.fetchone()
 			detail_dict["total_lead_contact"] = total_leads_contact[0]
-			if(detail_dict["total_lead"] != 0):
-				detail_dict["contact_rate"] = round((detail_dict["total_lead_contact"]/detail_dict["total_lead"])*100,3)
+			if(detail_dict["total_leads_assigned"] != 0):
+				detail_dict["contact_rate"] = round((detail_dict["total_lead_contact"]/detail_dict["total_leads_assigned"])*100,3)
 			else:
 				detail_dict["contact_rate"] = 'NaN'
 			sql_replied_count = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered <= %s and (status in ('Response','In Process','Converted') or status_description LIKE '%yes%' )" 
