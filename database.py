@@ -608,7 +608,7 @@ def get_lead_assigned_user_by_contact(name):
 	if result is None:
 		return ""
 	else:
-		return result
+		return result[0]
 
 def get_lead_assigned_user_by_account(name):
 	conn = connect()
@@ -620,7 +620,7 @@ def get_lead_assigned_user_by_account(name):
 	if result is None:
 		return ""
 	else:
-		return result
+		return result[0]
 
 def get_lead_count(date_from, date_to,sale_id):
 	#datetime_object = datetime.strptime(date_from, '%m/%d/%y %H:%M:%S')
