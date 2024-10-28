@@ -608,7 +608,7 @@ def get_lead_assigned_user_by_contact(name):
 	if result is None:
 		return ""
 	else:
-		limit_date = datetime.today() + timedelta(-150)
+		limit_date = datetime.today() + timedelta(-30)
 		if(result[1] > limit_date):
 			return "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58"
 		else:
@@ -624,7 +624,7 @@ def get_lead_assigned_user_by_account(name):
 	if result is None:
 		return ""
 	else:
-		limit_date = datetime.today() + timedelta(-150)
+		limit_date = datetime.today() + timedelta(-30)
 		if(result[1] > limit_date):
 			return "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58"
 		else:
