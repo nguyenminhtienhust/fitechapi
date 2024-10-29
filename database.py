@@ -601,7 +601,7 @@ def get_account_assigned_user(name):
 def get_lead_assigned_user_by_contact(name):
 	conn = connect()
 	cursor = conn.cursor()
-	sql = ("SELECT assigned_user_id,date_entered FROM suitecrm.leads where first_name = %s and assigned_user_id is not null and assigned_user_id <> '' and assigned_user_id <> 'd6ea87ac-8c7e-a4ed-ba81-65f500a98e58' and assigned_user_id <> '1'")
+	sql = ("SELECT assigned_user_id,date_entered FROM suitecrm.leads where first_name = %s and assigned_user_id is not null and assigned_user_id <> '' and assigned_user_id <> 'd6ea87ac-8c7e-a4ed-ba81-65f500a98e58' and assigned_user_id <> '1' and assigned_user_id <> '62b60dd0-9ab9-735e-e291-65d2cd0ab68e' ORDER BY date_entered desc limit 1 ")
 	cursor.execute(sql, (name,))
 	result = cursor.fetchone()
 	conn.close()
@@ -617,7 +617,7 @@ def get_lead_assigned_user_by_contact(name):
 def get_lead_assigned_user_by_account(name):
 	conn = connect()
 	cursor = conn.cursor()
-	sql = ("SELECT assigned_user_id,date_entered FROM suitecrm.leads where last_name = %s and assigned_user_id is not null and assigned_user_id <> '' and assigned_user_id <> 'd6ea87ac-8c7e-a4ed-ba81-65f500a98e58' and assigned_user_id <> '1' ")
+	sql = ("SELECT assigned_user_id,date_entered FROM suitecrm.leads where last_name = %s and assigned_user_id is not null and assigned_user_id <> '' and assigned_user_id <> 'd6ea87ac-8c7e-a4ed-ba81-65f500a98e58' and assigned_user_id <> '1' and assigned_user_id <> '62b60dd0-9ab9-735e-e291-65d2cd0ab68e' ORDER BY date_entered desc limit 1 ")
 	cursor.execute(sql, (name,))
 	result = cursor.fetchone()
 	conn.close()
