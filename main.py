@@ -3,7 +3,7 @@ from database import connect
 from fastapi import HTTPException
 from database import get_item_by_name,find_minimum_leads_by_sale,get_all_dashboard,get_this_month_dashboard,get_today_dashboard,export_all_leads_in_Malaysia,get_leads_today,get_leads_yesterday,get_active_sales,assign_sale_with_lead
 from database import get_account_by_name, check_exist_email, check_email_lead, add_email_addressed, get_contact_by_name, get_contact_assigned_user, get_account_assigned_user, get_lead_assigned_user_by_contact, get_lead_assigned_user_by_account
-from database import get_lead_count, get_all_dashboard_by_date, get_email_exist, get_performance_report
+from database import get_lead_count, get_all_dashboard_by_date, get_email_exist, get_performance_report, get_meetings
 from pydantic import BaseModel
 from contextlib import asynccontextmanager
 #from psycopg_pool import AsyncConnectionPool
@@ -204,4 +204,10 @@ async def get_active_lead(item : ItemName):
 @app.get("/getperformancereport")
 async def performance_report(item : ItemName):
 	data = get_performance_report(item.name)
+	return data
+
+
+@app.get("/getmeeting")
+async def getmeetings(item : ItemName):
+	data = get_meetings(item.name)
 	return data
