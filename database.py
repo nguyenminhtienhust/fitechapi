@@ -30,6 +30,7 @@ def connect():
 # 		database='suitecrm'
 # 	)
 
+
 def export_all_leads_in_Malaysia():
 	conn = connect()
 	cursor = conn.cursor()
@@ -967,3 +968,29 @@ def get_performance_report(saleMember):
 		final_dict = {"report": detail_list}
 		return final_dict
 	
+
+def get_meetings(meeting_ids):
+	if meeting_ids:
+		arr = meeting_ids.split(",")
+		print(arr)
+		if (len(arr) == 1):
+			print(arr[0])
+			sql = "Select * from meetings where id = %s"
+			conn = connect()
+			cursor = conn.cursor()
+			cursor.execute(sql,(arr[0],))
+			total_meeting = cursor.fetchall()
+			final_dict = {"meeting":total_meeting}
+			return final_dict
+		else:
+			t = tuple(arr)
+			sql = "select * from meetings where id IN {}".format(t)
+			conn = connect()
+			cursor = conn.cursor()
+			cursor.execute(sql)
+			total_meeting = cursor.fetchall()
+			final_dict = {"meeting":total_meeting}
+			return final_dict
+	else:
+		final_dict = {"meeting":""}
+		return final_dict
