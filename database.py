@@ -1,7 +1,8 @@
+
 import mysql.connector
 from dotenv import load_dotenv
 import os
-from datetime import datetime, timedelta, timezone, date, UTC
+from datetime import datetime, timedelta, timezone, date
 import calendar
 import requests
 import time
@@ -12,7 +13,6 @@ MYSQL_HOST = os.getenv("MYSQL_HOST")
 MYSQL_USER = os.getenv("MYSQL_USER")
 MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD")
 MYSQL_DB = os.getenv("MYSQL_DB")
-
 
 # Connect to MySQL
 def connect():
@@ -981,7 +981,6 @@ def get_meetings(meeting_ids):
 			total_meeting = cursor.fetchall()
 			for meeting in total_meeting:
 				meeting_dict={"Lead" : meeting[0]}
-				#created_on = datetime.fromisoformat(str(meeting[5])).replace(tzinfo=UTC).astimezone()
 				meeting_dict["Created_Date"] = meeting[5]
 				meeting_dict["Name"] = meeting[4]
 				meeting_dict["Created_By"] = meeting[2]
@@ -997,7 +996,6 @@ def get_meetings(meeting_ids):
 			total_meeting = cursor.fetchall()
 			for meeting in total_meeting:
 				meeting_dict={"Lead" : meeting[0]}
-				#created_on = datetime.fromisoformat(str(meeting[5])).replace(tzinfo=UTC).astimezone()
 				meeting_dict["Created_Date"] = meeting[5]
 				meeting_dict["Name"] = meeting[4]
 				meeting_dict["Created_By"] = meeting[2]
@@ -1013,7 +1011,6 @@ def get_meetings(meeting_ids):
 		total_meeting = cursor.fetchall()
 		for meeting in total_meeting:
 			meeting_dict={"Lead" : meeting[0]}
-			#created_on = datetime.fromisoformat(str(meeting[5])).replace(tzinfo=UTC).astimezone()
 			meeting_dict["Created_Date"] = meeting[5]
 			meeting_dict["Name"] = meeting[4]
 			meeting_dict["Created_By"] = meeting[2]
