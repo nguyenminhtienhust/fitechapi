@@ -886,7 +886,7 @@ def get_performance_report(saleMember):
 				detail_dict["replied_rate"] = round((detail_dict["total_replied_contact"]/detail_dict["total_lead_contact"])*100,3)
 			else:
 				detail_dict["replied_rate"] = 'NaN'
-			sql_meeting_count = "Select id from meetings where parent_id in (select id from leads where deleted = 0 and date_entered >= %s and date_entered < %s " + where_sql + ")" 
+			sql_meeting_count = "Select id from meetings where deleted = 0 and parent_id in (select id from leads where deleted = 0 and date_entered >= %s and date_entered < %s " + where_sql + ")" 
 			#sql_meeting_count = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered < %s and id in (select parent_id from meetings)" + where_sql
 			cursor.execute(sql_meeting_count,(first_date_string,last_date_string,saleMember))
 			# total_meeting = cursor.fetchone()
@@ -947,7 +947,7 @@ def get_performance_report(saleMember):
 				detail_dict["replied_rate"] = round((detail_dict["total_replied_contact"]/detail_dict["total_lead_contact"])*100,3)
 			else:
 				detail_dict["replied_rate"] = 'NaN'
-			sql_meeting_count = "Select id from meetings where parent_id in (select id from leads where deleted = 0 and date_entered >= %s and date_entered < %s)" 
+			sql_meeting_count = "Select id from meetings where deleted = 0 and parent_id in (select id from leads where deleted = 0 and date_entered >= %s and date_entered < %s)" 
 			#sql_meeting_count = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered < %s and id in (select parent_id from meetings)" 
 			cursor.execute(sql_meeting_count,(first_date_string,last_date_string))
 			#total_meeting = cursor.fetchone()
@@ -962,7 +962,6 @@ def get_performance_report(saleMember):
 				detail_dict["meeting_rate"] = round((detail_dict["total_meeting"]/detail_dict["total_lead_contact"])*100,3)
 			else:
 				detail_dict["meeting_rate"] = 'NaN'
-			sql_meeting_id = "Select  from leads where deleted = 0 and date_entered >= %s and date_entered < %s and id in (select parent_id from meetings)" 
 			detail_list.append(detail_dict)
 			month = month + 1
 		final_dict = {"report": detail_list}
@@ -972,25 +971,48 @@ def get_performance_report(saleMember):
 def get_meetings(meeting_ids):
 	if meeting_ids:
 		arr = meeting_ids.split(",")
-		print(arr)
+		meeting_list=[]
 		if (len(arr) == 1):
-			print(arr[0])
-			sql = "Select * from meetings where id = %s"
+			sql = "Select l.last_name,l.id as lead_id,usr.first_name, m.* from meetings m left join leads l on m.parent_id = l.id left join users usr on usr.id = m.created_by where m.id = %s"
 			conn = connect()
 			cursor = conn.cursor()
 			cursor.execute(sql,(arr[0],))
 			total_meeting = cursor.fetchall()
-			final_dict = {"meeting":total_meeting}
+			for meeting in total_meeting:
+				meeting_dict={"Lead" : meeting[0]}
+				meeting_dict["Created_Date"] = meeting[5]
+				meeting_dict["Name"] = meeting[4]
+				meeting_dict["Created_By"] = meeting[2]
+				meeting_list.append(meeting_dict)
+			final_dict = {"meeting":meeting_list}
 			return final_dict
 		else:
 			t = tuple(arr)
-			sql = "select * from meetings where id IN {}".format(t)
+			sql = "select l.last_name,l.id as lead_id,usr.first_name, m.* from meetings m left join leads l on m.parent_id = l.id left join users usr on usr.id = m.created_by where m.id IN {}".format(t)
 			conn = connect()
 			cursor = conn.cursor()
 			cursor.execute(sql)
 			total_meeting = cursor.fetchall()
-			final_dict = {"meeting":total_meeting}
+			for meeting in total_meeting:
+				meeting_dict={"Lead" : meeting[0]}
+				meeting_dict["Created_Date"] = meeting[5]
+				meeting_dict["Name"] = meeting[4]
+				meeting_dict["Created_By"] = meeting[2]
+				meeting_list.append(meeting_dict)
+			final_dict = {"meeting":meeting_list}
 			return final_dict
 	else:
-		final_dict = {"meeting":""}
+		meeting_list=[]
+		sql = "select l.last_name,l.id as lead_id,usr.first_name, m.* from meetings m left join leads l on m.parent_id = l.id left join users usr on usr.id = m.created_by"
+		conn = connect()
+		cursor = conn.cursor()
+		cursor.execute(sql)
+		total_meeting = cursor.fetchall()
+		for meeting in total_meeting:
+			meeting_dict={"Lead" : meeting[0]}
+			meeting_dict["Created_Date"] = meeting[5]
+			meeting_dict["Name"] = meeting[4]
+			meeting_dict["Created_By"] = meeting[2]
+			meeting_list.append(meeting_dict)
+		final_dict = {"meeting":meeting_list}
 		return final_dict
