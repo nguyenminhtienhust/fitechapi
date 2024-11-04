@@ -885,10 +885,17 @@ def get_performance_report(saleMember):
 				detail_dict["replied_rate"] = round((detail_dict["total_replied_contact"]/detail_dict["total_lead_contact"])*100,3)
 			else:
 				detail_dict["replied_rate"] = 'NaN'
-			sql_meeting_count = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered < %s and id in (select parent_id from meetings)" + where_sql
+			sql_meeting_count = "Select id from meetings where parent_id in (select id from leads where deleted = 0 and date_entered >= %s and date_entered < %s " + where_sql + ")" 
+			#sql_meeting_count = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered < %s and id in (select parent_id from meetings)" + where_sql
 			cursor.execute(sql_meeting_count,(first_date_string,last_date_string,saleMember))
-			total_meeting = cursor.fetchone()
-			detail_dict["total_meeting"] = total_meeting[0]
+			# total_meeting = cursor.fetchone()
+			# detail_dict["total_meeting"] = total_meeting[0]
+			total_meeting = cursor.fetchall()
+			detail_dict["total_meeting"] = len(total_meeting)
+			meeting_list = []
+			for meeing in total_meeting:
+				meeting_list.append(meeing[0])
+			detail_dict["meeting_list"] = meeting_list
 			if(detail_dict["total_lead_contact"] != 0):
 				detail_dict["meeting_rate"] = round((detail_dict["total_meeting"]/detail_dict["total_lead_contact"])*100,3)
 			else:
@@ -939,14 +946,22 @@ def get_performance_report(saleMember):
 				detail_dict["replied_rate"] = round((detail_dict["total_replied_contact"]/detail_dict["total_lead_contact"])*100,3)
 			else:
 				detail_dict["replied_rate"] = 'NaN'
-			sql_meeting_count = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered < %s and id in (select parent_id from meetings)" 
+			sql_meeting_count = "Select id from meetings where parent_id in (select id from leads where deleted = 0 and date_entered >= %s and date_entered < %s)" 
+			#sql_meeting_count = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered < %s and id in (select parent_id from meetings)" 
 			cursor.execute(sql_meeting_count,(first_date_string,last_date_string))
-			total_meeting = cursor.fetchone()
-			detail_dict["total_meeting"] = total_meeting[0]
+			#total_meeting = cursor.fetchone()
+			#detail_dict["total_meeting"] = total_meeting[0]
+			total_meeting = cursor.fetchall()
+			detail_dict["total_meeting"] = len(total_meeting)
+			meeting_list = []
+			for meeing in total_meeting:
+				meeting_list.append(meeing[0])
+			detail_dict["meeting_list"] = meeting_list
 			if(detail_dict["total_lead_contact"] != 0):
 				detail_dict["meeting_rate"] = round((detail_dict["total_meeting"]/detail_dict["total_lead_contact"])*100,3)
 			else:
 				detail_dict["meeting_rate"] = 'NaN'
+			sql_meeting_id = "Select  from leads where deleted = 0 and date_entered >= %s and date_entered < %s and id in (select parent_id from meetings)" 
 			detail_list.append(detail_dict)
 			month = month + 1
 		final_dict = {"report": detail_list}
