@@ -982,7 +982,7 @@ def get_meetings(meeting_ids):
 			for meeting in total_meeting:
 				meeting_dict={"Lead" : meeting[0]}
 				created_on = datetime.fromisoformat(str(meeting[5])).replace(tzinfo=UTC).astimezone()
-				meeting_dict["Created_Date"] = created_on
+				meeting_dict["Created_Date"] = meeting[5]
 				meeting_dict["Name"] = meeting[4]
 				meeting_dict["Created_By"] = meeting[2]
 				meeting_list.append(meeting_dict)
@@ -998,7 +998,7 @@ def get_meetings(meeting_ids):
 			for meeting in total_meeting:
 				meeting_dict={"Lead" : meeting[0]}
 				created_on = datetime.fromisoformat(str(meeting[5])).replace(tzinfo=UTC).astimezone()
-				meeting_dict["Created_Date"] = created_on
+				meeting_dict["Created_Date"] = meeting[5]
 				meeting_dict["Name"] = meeting[4]
 				meeting_dict["Created_By"] = meeting[2]
 				meeting_list.append(meeting_dict)
@@ -1014,7 +1014,7 @@ def get_meetings(meeting_ids):
 		for meeting in total_meeting:
 			meeting_dict={"Lead" : meeting[0]}
 			created_on = datetime.fromisoformat(str(meeting[5])).replace(tzinfo=UTC).astimezone()
-			meeting_dict["Created_Date"] = created_on
+			meeting_dict["Created_Date"] = meeting[5]
 			meeting_dict["Name"] = meeting[4]
 			meeting_dict["Created_By"] = meeting[2]
 			meeting_list.append(meeting_dict)
