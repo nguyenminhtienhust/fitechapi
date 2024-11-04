@@ -1,7 +1,7 @@
 import mysql.connector
 from dotenv import load_dotenv
 import os
-from datetime import datetime, timedelta, timezone, date
+from datetime import datetime, timedelta, timezone, date, UTC
 import calendar
 import requests
 import time
@@ -980,7 +980,8 @@ def get_meetings(meeting_ids):
 			total_meeting = cursor.fetchall()
 			for meeting in total_meeting:
 				meeting_dict={"Lead" : meeting[0]}
-				meeting_dict["Created_Date"] = meeting[5]
+				created_on = datetime.fromisoformat(meeting[5]).replace(tzinfo=UTC).astimezone()
+				meeting_dict["Created_Date"] = created_on
 				meeting_dict["Name"] = meeting[4]
 				meeting_dict["Created_By"] = meeting[2]
 				meeting_list.append(meeting_dict)
@@ -995,7 +996,8 @@ def get_meetings(meeting_ids):
 			total_meeting = cursor.fetchall()
 			for meeting in total_meeting:
 				meeting_dict={"Lead" : meeting[0]}
-				meeting_dict["Created_Date"] = meeting[5]
+				created_on = datetime.fromisoformat(meeting[5]).replace(tzinfo=UTC).astimezone()
+				meeting_dict["Created_Date"] = created_on
 				meeting_dict["Name"] = meeting[4]
 				meeting_dict["Created_By"] = meeting[2]
 				meeting_list.append(meeting_dict)
@@ -1010,7 +1012,8 @@ def get_meetings(meeting_ids):
 		total_meeting = cursor.fetchall()
 		for meeting in total_meeting:
 			meeting_dict={"Lead" : meeting[0]}
-			meeting_dict["Created_Date"] = meeting[5]
+			created_on = datetime.fromisoformat(meeting[5]).replace(tzinfo=UTC).astimezone()
+			meeting_dict["Created_Date"] = created_on
 			meeting_dict["Name"] = meeting[4]
 			meeting_dict["Created_By"] = meeting[2]
 			meeting_list.append(meeting_dict)
