@@ -15,21 +15,21 @@ MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD")
 MYSQL_DB = os.getenv("MYSQL_DB")
 
 # Connect to MySQL
-def connect():
-	return mysql.connector.connect(
-		host=MYSQL_HOST,
-		user=MYSQL_USER,
-		password=MYSQL_PASSWORD,
-		database=MYSQL_DB
-	)
-
 # def connect():
 # 	return mysql.connector.connect(
-# 		host='localhost',
-# 		user='root',
-# 		password='tranha1111',
-# 		database='suitecrm'
+# 		host=MYSQL_HOST,
+# 		user=MYSQL_USER,
+# 		password=MYSQL_PASSWORD,
+# 		database=MYSQL_DB
 # 	)
+
+def connect():
+	return mysql.connector.connect(
+		host='localhost',
+		user='root',
+		password='tranha1111',
+		database='suitecrm'
+	)
 
 
 def export_all_leads_in_Malaysia():
@@ -1049,8 +1049,8 @@ def getMeeting_By_Date(from_date, to_date):
 	meeting_list=[]
 	conn = connect()
 	cursor = conn.cursor()
-	sql_meeting_count = "select l.last_name,l.id as lead_id,usr.first_name, m.* from meetings m left join leads l on m.parent_id = l.id left join users usr on usr.id = m.created_by where deleted = 0 and parent_id in (select id from leads where deleted = 0 and date_entered >= %s and date_entered < %s)" 
-	cursor.execute(sql_meeting_count)
+	sql_meeting_count = "select l.last_name,l.id as lead_id,usr.first_name, m.* from meetings m left join leads l on m.parent_id = l.id left join users usr on usr.id = m.created_by where m.deleted = 0 and parent_id in (select id from leads where deleted = 0 and date_entered >= %s and date_entered < %s)" 
+	cursor.execute(sql_meeting_count,(from_date,to_date,))
 	total_meeting = cursor.fetchall()
 	for meeting in total_meeting:
 		meeting_dict={"Lead" : meeting[0]}
