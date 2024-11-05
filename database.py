@@ -267,7 +267,7 @@ def get_all_dashboard():
 	cursor.execute(dead_sql,())
 	results_dead = cursor.fetchone()
 	final_dict["total_dead"] = results_dead[0]
-
+	conn.close()
 	return {"data":final_dict}
 
 def get_this_month_dashboard():
@@ -414,6 +414,7 @@ def get_this_month_dashboard():
 	cursor.execute(dead_sql,(first_date_string,last_date_string))
 	results_dead = cursor.fetchone()
 	final_dict["total_dead"] = results_dead[0]
+	conn.close()
 	return {"data":final_dict}
 
 def get_today_dashboard():
@@ -509,7 +510,7 @@ def get_today_dashboard():
 	cursor.execute(dead_sql,())
 	results_dead = cursor.fetchone()
 	final_dict["total_dead"] = results_dead[0]
-
+	conn.close()
 	return {"data":final_dict}
 	
 def get_account_by_name(name):
@@ -771,7 +772,7 @@ def get_all_dashboard_by_date(date_from, date_to):
 	cursor.execute(dead_sql,(date_from, date_to))
 	results_dead = cursor.fetchone()
 	final_dict["total_dead"] = results_dead[0]
-
+	conn.close()
 	return {"data":final_dict}
 
 def login_crm():
@@ -905,6 +906,7 @@ def get_performance_report(saleMember):
 			detail_list.append(detail_dict)
 			month = month + 1
 		final_dict = {"report": detail_list}
+		conn.close()
 		return final_dict
 	else:
 		while month <= current_month:
@@ -966,6 +968,7 @@ def get_performance_report(saleMember):
 			detail_list.append(detail_dict)
 			month = month + 1
 		final_dict = {"report": detail_list}
+		conn.close()
 		return final_dict
 	
 
@@ -986,6 +989,7 @@ def get_meetings(meeting_ids):
 				meeting_dict["Created_By"] = meeting[2]
 				meeting_list.append(meeting_dict)
 			final_dict = {"meeting":meeting_list}
+			conn.close()
 			return final_dict
 		else:
 			t = tuple(arr)
@@ -1001,6 +1005,7 @@ def get_meetings(meeting_ids):
 				meeting_dict["Created_By"] = meeting[2]
 				meeting_list.append(meeting_dict)
 			final_dict = {"meeting":meeting_list}
+			conn.close()
 			return final_dict
 	else:
 		meeting_list=[]
@@ -1016,6 +1021,7 @@ def get_meetings(meeting_ids):
 			meeting_dict["Created_By"] = meeting[2]
 			meeting_list.append(meeting_dict)
 		final_dict = {"meeting":meeting_list}
+		conn.close()
 		return final_dict
 
 
