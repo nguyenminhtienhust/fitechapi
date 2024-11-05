@@ -1017,3 +1017,21 @@ def get_meetings(meeting_ids):
 			meeting_list.append(meeting_dict)
 		final_dict = {"meeting":meeting_list}
 		return final_dict
+
+
+def get_lead_status_with_email(email):
+	#datetime_object = datetime.strptime(date_from, '%m/%d/%y %H:%M:%S')
+	conn = connect()
+	cursor = conn.cursor()
+	sql_get_email = ("SELECT id FROM suitecrm.email_addresses where email_address = %s and deleted = 0")
+	cursor.execute(sql_get_email, (email,))
+	email_id = cursor.fetchone()
+	if email_id is None:
+		conn.close()
+		return 0
+	else:
+		sql = ("SELECT count(*) from suitecrm.leads where id in (SELECT bean_id from suitecrm.email_addr_bean_rel where email_address_id = %s) and status in ('Response', 'In Process','Converted') ")
+		cursor.execute(sql, (email_id[0],))
+		lead_count = cursor.fetchone()
+		conn.close()
+		return lead_count[0]
