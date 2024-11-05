@@ -965,6 +965,8 @@ def get_performance_report(saleMember):
 				detail_dict["meeting_rate"] = round((detail_dict["total_meeting"]/detail_dict["total_lead_contact"])*100,3)
 			else:
 				detail_dict["meeting_rate"] = 'NaN'
+			detail_dict["from_date"] = first_date_string
+			detail_dict["to_date"] = last_date_string
 			detail_list.append(detail_dict)
 			month = month + 1
 		final_dict = {"report": detail_list}
@@ -1041,3 +1043,10 @@ def get_lead_status_with_email(email):
 		lead_count = cursor.fetchone()
 		conn.close()
 		return lead_count[0]
+	
+
+
+# def responsed_lead_count_by_company(account):
+# 	conn = connect()
+# 	cursor = conn.cursor()
+# 	sql = ("SELECT count(*) from leads where ")
