@@ -56,7 +56,7 @@ async def leads():
 async def check_leads(item: ItemLead):
 	item_id = get_item_by_name(item.title, item.last_name, item.first_name)
 	if item_id == "":
-		return {"data" : "", "status" : "", "phone_work" : "", "phone_mobile": "", "phone_other": "", "website" : "", "assigned_user": ""}
+		return {"data" : "", "status" : "", "phone_work" : "", "phone_mobile": "", "phone_other": "", "website" : "", "assigned_user": "", "desc": ""}
 	else:
 		phone_work = ""
 		if item_id[17] is not None:
@@ -70,8 +70,10 @@ async def check_leads(item: ItemLead):
 		website = ""
 		if item_id[53] is not None:
 			website = item_id[53]
-			
-		return {"data" : item_id[0], "status" : item_id[39], "phone_work" : phone_work, "phone_mobile": phone_mobile, "phone_other": phone_other, "website" : website, "assigned_user": item_id[7]}
+		desc = ""
+		if item_id[40] is not None:
+			desc = item_id[40]
+		return {"data" : item_id[0], "status" : item_id[39], "phone_work" : phone_work, "phone_mobile": phone_mobile, "phone_other": phone_other, "website" : website, "assigned_user": item_id[7],"desc":desc}
 
 @app.get("/leads/find-minimum-sale")
 async def find_sale():
