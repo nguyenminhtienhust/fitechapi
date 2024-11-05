@@ -15,21 +15,21 @@ MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD")
 MYSQL_DB = os.getenv("MYSQL_DB")
 
 # Connect to MySQL
-# def connect():
-# 	return mysql.connector.connect(
-# 		host=MYSQL_HOST,
-# 		user=MYSQL_USER,
-# 		password=MYSQL_PASSWORD,
-# 		database=MYSQL_DB
-# 	)
-
 def connect():
 	return mysql.connector.connect(
-		host='localhost',
-		user='root',
-		password='tranha1111',
-		database='suitecrm'
+		host=MYSQL_HOST,
+		user=MYSQL_USER,
+		password=MYSQL_PASSWORD,
+		database=MYSQL_DB
 	)
+
+# def connect():
+# 	return mysql.connector.connect(
+# 		host='localhost',
+# 		user='root',
+# 		password='tranha1111',
+# 		database='suitecrm'
+# 	)
 
 
 def export_all_leads_in_Malaysia():
