@@ -845,6 +845,7 @@ def get_email_exist(email):
 	
 
 def get_performance_report(saleMember, input_year):
+	print(saleMember,"saleMember")
 	current_month = datetime.now().month
 	current_year = datetime.now().year
 	search_year = int(input_year)
@@ -906,6 +907,8 @@ def get_performance_report(saleMember, input_year):
 				detail_dict["meeting_rate"] = round((detail_dict["total_meeting"]/detail_dict["total_lead_contact"])*100,3)
 			else:
 				detail_dict["meeting_rate"] = 'NaN'
+			detail_dict["from_date"] = first_date_string
+			detail_dict["to_date"] = last_date_string
 			detail_list.append(detail_dict)
 			month = month + 1
 		final_dict = {"report": detail_list}
