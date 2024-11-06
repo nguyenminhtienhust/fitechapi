@@ -988,7 +988,7 @@ def get_meetings(meeting_ids):
 				meeting_dict={"Lead" : meeting[0]}
 				#meeting_dict["Created_Date"] = meeting[5]
 				utc_time= utc_to_local(meeting[5])
-				meeting_dict["Created_Date"] = utc_time.strftime("%Y-%m-%d %H:%M:%S")
+				meeting_dict["Created_Date"] = utc_time.strftime("%d-%m-%Y %H:%M:%S")
 				meeting_dict["Name"] = meeting[4]
 				meeting_dict["Created_By"] = meeting[2]
 				meeting_dict["Lead_id"] = meeting[1]
@@ -1007,7 +1007,7 @@ def get_meetings(meeting_ids):
 				meeting_dict={"Lead" : meeting[0]}
 				#meeting_dict["Created_Date"] = meeting[5]
 				utc_time= utc_to_local(meeting[5])
-				meeting_dict["Created_Date"] = utc_time.strftime("%Y-%m-%d %H:%M:%S")
+				meeting_dict["Created_Date"] = utc_time.strftime("%d-%m-%Y %H:%M:%S")
 				meeting_dict["Name"] = meeting[4]
 				meeting_dict["Created_By"] = meeting[2]
 				meeting_dict["Lead_id"] = meeting[1]
@@ -1026,7 +1026,7 @@ def get_meetings(meeting_ids):
 			meeting_dict={"Lead" : meeting[0]}
 			#meeting_dict["Created_Date"] = meeting[5]
 			utc_time= utc_to_local(meeting[5])
-			meeting_dict["Created_Date"] = utc_time.strftime("%Y-%m-%d %H:%M:%S")
+			meeting_dict["Created_Date"] = utc_time.strftime("%d-%m-%Y %H:%M:%S")
 			meeting_dict["Name"] = meeting[4]
 			meeting_dict["Created_By"] = meeting[2]
 			meeting_dict["Lead_id"] = meeting[1]
@@ -1065,7 +1065,7 @@ def getMeeting_By_Date(from_date, to_date):
 		meeting_dict={"Lead" : meeting[0]}
 		#meeting_dict["Created_Date"] = meeting[5]
 		utc_time= utc_to_local(meeting[5])
-		meeting_dict["Created_Date"] = utc_time.strftime("%Y-%m-%d %H:%M:%S")
+		meeting_dict["Created_Date"] = utc_time.strftime("%d-%m-%Y %H:%M:%S")
 		meeting_dict["Name"] = meeting[4]
 		meeting_dict["Created_By"] = meeting[2]
 		meeting_dict["Lead_id"] = meeting[1]
