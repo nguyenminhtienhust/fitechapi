@@ -986,9 +986,12 @@ def get_meetings(meeting_ids):
 			total_meeting = cursor.fetchall()
 			for meeting in total_meeting:
 				meeting_dict={"Lead" : meeting[0]}
-				meeting_dict["Created_Date"] = meeting[5]
+				#meeting_dict["Created_Date"] = meeting[5]
+				utc_time= utc_to_local(meeting[5])
+				meeting_dict["Created_Date"] = utc_time.strftime("%Y-%m-%d %H:%M:%S")
 				meeting_dict["Name"] = meeting[4]
 				meeting_dict["Created_By"] = meeting[2]
+				meeting_dict["Lead_id"] = meeting[1]
 				meeting_list.append(meeting_dict)
 			final_dict = {"meeting":meeting_list}
 			conn.close()
@@ -1002,9 +1005,12 @@ def get_meetings(meeting_ids):
 			total_meeting = cursor.fetchall()
 			for meeting in total_meeting:
 				meeting_dict={"Lead" : meeting[0]}
-				meeting_dict["Created_Date"] = meeting[5]
+				#meeting_dict["Created_Date"] = meeting[5]
+				utc_time= utc_to_local(meeting[5])
+				meeting_dict["Created_Date"] = utc_time.strftime("%Y-%m-%d %H:%M:%S")
 				meeting_dict["Name"] = meeting[4]
 				meeting_dict["Created_By"] = meeting[2]
+				meeting_dict["Lead_id"] = meeting[1]
 				meeting_list.append(meeting_dict)
 			final_dict = {"meeting":meeting_list}
 			conn.close()
@@ -1018,9 +1024,12 @@ def get_meetings(meeting_ids):
 		total_meeting = cursor.fetchall()
 		for meeting in total_meeting:
 			meeting_dict={"Lead" : meeting[0]}
-			meeting_dict["Created_Date"] = meeting[5]
+			#meeting_dict["Created_Date"] = meeting[5]
+			utc_time= utc_to_local(meeting[5])
+			meeting_dict["Created_Date"] = utc_time.strftime("%Y-%m-%d %H:%M:%S")
 			meeting_dict["Name"] = meeting[4]
 			meeting_dict["Created_By"] = meeting[2]
+			meeting_dict["Lead_id"] = meeting[1]
 			meeting_list.append(meeting_dict)
 		final_dict = {"meeting":meeting_list}
 		conn.close()
@@ -1054,13 +1063,19 @@ def getMeeting_By_Date(from_date, to_date):
 	total_meeting = cursor.fetchall()
 	for meeting in total_meeting:
 		meeting_dict={"Lead" : meeting[0]}
-		meeting_dict["Created_Date"] = meeting[5]
+		#meeting_dict["Created_Date"] = meeting[5]
+		utc_time= utc_to_local(meeting[5])
+		meeting_dict["Created_Date"] = utc_time.strftime("%Y-%m-%d %H:%M:%S")
 		meeting_dict["Name"] = meeting[4]
 		meeting_dict["Created_By"] = meeting[2]
+		meeting_dict["Lead_id"] = meeting[1]
 		meeting_list.append(meeting_dict)
 	final_dict = {"meeting":meeting_list}
 	conn.close()
 	return final_dict
+
+def utc_to_local(utc_dt):
+    return utc_dt.replace(tzinfo=timezone.utc).astimezone(tz=None)
 # def responsed_lead_count_by_company(account):
 # 	conn = connect()
 # 	cursor = conn.cursor()
