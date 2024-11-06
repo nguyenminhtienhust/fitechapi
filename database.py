@@ -848,6 +848,8 @@ def get_performance_report(saleMember, input_year):
 	current_month = datetime.now().month
 	current_year = datetime.now().year
 	search_year = int(input_year)
+	if(search_year != current_year):
+		current_month = 12
 	month = 1
 	conn = connect()
 	cursor = conn.cursor()
