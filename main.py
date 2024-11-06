@@ -36,6 +36,9 @@ class ItemGetLeadCount(BaseModel):
 class ItemDashBoardByDate(BaseModel):
 	date_from: str
 	date_to: str
+class ItemTwoParams(BaseModel):
+	param_1 : str
+	param_2: str
 
 @app.get("/")
 def read_root():
@@ -204,8 +207,8 @@ async def get_active_lead(item : ItemName):
 	return {"email_expired" : lead_count}
 
 @app.get("/getperformancereport")
-async def performance_report(item : ItemName):
-	data = get_performance_report(item.name)
+async def performance_report(item : ItemTwoParams):
+	data = get_performance_report(item.param_1,item.param_2)
 	return data
 
 

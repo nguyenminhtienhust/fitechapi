@@ -844,9 +844,10 @@ def get_email_exist(email):
 		return lead_count[0]
 	
 
-def get_performance_report(saleMember):
+def get_performance_report(saleMember, input_year):
 	current_month = datetime.now().month
 	current_year = datetime.now().year
+	search_year = int(input_year)
 	month = 1
 	conn = connect()
 	cursor = conn.cursor()
@@ -855,8 +856,8 @@ def get_performance_report(saleMember):
 		where_sql = " and assigned_user_id = %s"
 		while month <= current_month:
 			detail_dict = {"month":month}
-			number_day_per_month = calendar.monthrange(current_year, month)
-			first_date = date(current_year, month, 1)
+			number_day_per_month = calendar.monthrange(search_year, month)
+			first_date = date(search_year, month, 1)
 			first_date_str = first_date.strftime('%Y-%m-%d')
 			dtfrom = datetime.fromisoformat(first_date_str)
 			first_date_utc = dtfrom.astimezone(timezone.utc)
@@ -911,8 +912,8 @@ def get_performance_report(saleMember):
 	else:
 		while month <= current_month:
 			detail_dict = {"month":month}
-			number_day_per_month = calendar.monthrange(current_year, month)
-			first_date = date(current_year, month, 1)
+			number_day_per_month = calendar.monthrange(search_year, month)
+			first_date = date(search_year, month, 1)
 			first_date_str = first_date.strftime('%Y-%m-%d')
 			dtfrom = datetime.fromisoformat(first_date_str)
 			first_date_utc = dtfrom.astimezone(timezone.utc)
