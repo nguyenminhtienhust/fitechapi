@@ -1058,8 +1058,12 @@ def getMeeting_By_Date(from_date, to_date):
 	meeting_list=[]
 	conn = connect()
 	cursor = conn.cursor()
+	formated_from_date = from_date.replace("_"," ")
+	formated_to_date = to_date.replace("_"," ")
+	from_date_obj = datetime.strptime(formated_from_date, '%Y-%m-%d %H:%M:%S')
+	to_date_obj = datetime.strptime(formated_to_date, '%Y-%m-%d %H:%M:%S')
 	sql_meeting_count = "select l.last_name,l.id as lead_id,usr.first_name, m.* from meetings m left join leads l on m.parent_id = l.id left join users usr on usr.id = m.created_by where m.deleted = 0 and parent_id in (select id from leads where deleted = 0 and date_entered >= %s and date_entered < %s)" 
-	cursor.execute(sql_meeting_count,(from_date,to_date,))
+	cursor.execute(sql_meeting_count,(formated_from_date,formated_to_date,))
 	total_meeting = cursor.fetchall()
 	for meeting in total_meeting:
 		meeting_dict={"Lead" : meeting[0]}
