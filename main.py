@@ -225,6 +225,6 @@ async def get_lead_status(item : ItemName):
 
 
 @app.get("/getmeetingByDate")
-async def getMeeting_ByDate(item : ItemDashBoardByDate):
-	data = getMeeting_By_Date(item.date_from, item.date_to)
+async def getMeeting_ByDate(item : ItemGetLeadCount):
+	data = getMeeting_By_Date(item.date_from, item.date_to, item.sale_id)
 	return data

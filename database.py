@@ -1060,7 +1060,7 @@ def get_lead_status_with_email(email):
 		return lead_count[0]
 	
 
-def getMeeting_By_Date(from_date, to_date):
+def getMeeting_By_Date(from_date, to_date, saleMember):
 	meeting_list=[]
 	conn = connect()
 	cursor = conn.cursor()
@@ -1068,21 +1068,38 @@ def getMeeting_By_Date(from_date, to_date):
 	formated_to_date = to_date.replace("_"," ")
 	from_date_obj = datetime.strptime(formated_from_date, '%Y-%m-%d %H:%M:%S')
 	to_date_obj = datetime.strptime(formated_to_date, '%Y-%m-%d %H:%M:%S')
-	sql_meeting_count = "select l.last_name,l.id as lead_id,usr.first_name, m.* from meetings m left join leads l on m.parent_id = l.id left join users usr on usr.id = m.created_by where m.deleted = 0 and parent_id in (select id from leads where deleted = 0 and date_entered >= %s and date_entered < %s) order by m.date_entered asc" 
-	cursor.execute(sql_meeting_count,(formated_from_date,formated_to_date,))
-	total_meeting = cursor.fetchall()
-	for meeting in total_meeting:
-		meeting_dict={"Lead" : meeting[0]}
-		#meeting_dict["Created_Date"] = meeting[5]
-		utc_time= utc_to_local(meeting[5])
-		meeting_dict["Created_Date"] = utc_time.strftime("%d-%m-%Y %H:%M:%S")
-		meeting_dict["Name"] = meeting[4]
-		meeting_dict["Created_By"] = meeting[2]
-		meeting_dict["Lead_id"] = meeting[1]
-		meeting_list.append(meeting_dict)
-	final_dict = {"meeting":meeting_list}
-	conn.close()
-	return final_dict
+	if saleMember:
+		sql_meeting_count = "select l.last_name,l.id as lead_id,usr.first_name, m.* from meetings m left join leads l on m.parent_id = l.id left join users usr on usr.id = m.created_by where m.deleted = 0 and parent_id in (select id from leads where deleted = 0 and date_entered >= %s and date_entered < %s and assigned_user_id = %s) order by m.date_entered asc" 
+		cursor.execute(sql_meeting_count,(formated_from_date,formated_to_date,saleMember,))
+		total_meeting = cursor.fetchall()
+		for meeting in total_meeting:
+			meeting_dict={"Lead" : meeting[0]}
+			#meeting_dict["Created_Date"] = meeting[5]
+			utc_time= utc_to_local(meeting[5])
+			meeting_dict["Created_Date"] = utc_time.strftime("%d-%m-%Y %H:%M:%S")
+			meeting_dict["Name"] = meeting[4]
+			meeting_dict["Created_By"] = meeting[2]
+			meeting_dict["Lead_id"] = meeting[1]
+			meeting_list.append(meeting_dict)
+		final_dict = {"meeting":meeting_list}
+		conn.close()
+		return final_dict
+	else:
+		sql_meeting_count = "select l.last_name,l.id as lead_id,usr.first_name, m.* from meetings m left join leads l on m.parent_id = l.id left join users usr on usr.id = m.created_by where m.deleted = 0 and parent_id in (select id from leads where deleted = 0 and date_entered >= %s and date_entered < %s) order by m.date_entered asc" 
+		cursor.execute(sql_meeting_count,(formated_from_date,formated_to_date,))
+		total_meeting = cursor.fetchall()
+		for meeting in total_meeting:
+			meeting_dict={"Lead" : meeting[0]}
+			#meeting_dict["Created_Date"] = meeting[5]
+			utc_time= utc_to_local(meeting[5])
+			meeting_dict["Created_Date"] = utc_time.strftime("%d-%m-%Y %H:%M:%S")
+			meeting_dict["Name"] = meeting[4]
+			meeting_dict["Created_By"] = meeting[2]
+			meeting_dict["Lead_id"] = meeting[1]
+			meeting_list.append(meeting_dict)
+		final_dict = {"meeting":meeting_list}
+		conn.close()
+		return final_dict
 
 def utc_to_local(utc_dt):
     return utc_dt.replace(tzinfo=timezone.utc).astimezone(tz=None)
