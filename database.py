@@ -1103,7 +1103,25 @@ def getMeeting_By_Date(from_date, to_date, saleMember):
 
 def utc_to_local(utc_dt):
     return utc_dt.replace(tzinfo=timezone.utc).astimezone(tz=None)
+
+def get_lead_detail(lead_id,date_from, date_to):
+	lead_list = []
+	if lead_id:
+		sql = ("SELECT * from leads where deleted = 0 and id = %s")
+		conn = connect()
+		cursor = conn.cursor()
+		cursor.execute(sql,(lead_id,))
+		leads = cursor.fetchall()
+		for lead in leads:
+			lead_dict ={"Hirer_Name" : lead[9]}
+			lead_dict["Company_Name"] = lead[10]
+			lead_list.append(lead)
+		final_dict = {"lead_list":lead_list}
+		conn.close()
+		return final_dict
+
+
 # def responsed_lead_count_by_company(account):
 # 	conn = connect()
 # 	cursor = conn.cursor()
-# 	sql = ("SELECT count(*) from leads where ")
+# 	sql = ("SELECT count(*) from leads where deleted = 0 and first_name is Null and last_name = %s and status in ('Response', 'In Process', 'Converted')")
