@@ -1120,7 +1120,30 @@ def get_lead_detail(lead_id,date_from, date_to):
 		conn.close()
 		return final_dict
 
-
+def get_lead_assigned_user_by_account_and_email(name, email):
+	conn = connect()
+	cursor = conn.cursor()
+	print("email:",email)
+	sql_get_email = ("SELECT * FROM email_addresses where email_address = %s and deleted = 0")
+	cursor.execute(sql_get_email, (email,))
+	email_res = cursor.fetchone()
+	email_id = ""
+	if email_res is not None:
+		email_id = email_res[0]
+	print("email_id: ",email_id)
+	sql = ("SELECT l.assigned_user_id,l.date_entered, email.email_address_id FROM leads l left join email_addr_bean_rel email on l.id = email.bean_id where l.last_name = %s and assigned_user_id is not null and assigned_user_id <> '' and assigned_user_id <> 'd6ea87ac-8c7e-a4ed-ba81-65f500a98e58' and assigned_user_id <> '1' and assigned_user_id <> '62b60dd0-9ab9-735e-e291-65d2cd0ab68e' ORDER BY l.date_entered desc limit 1 ")
+	cursor.execute(sql,(name,))
+	result = cursor.fetchone()
+	conn.close()
+	if result is None:
+		return ""
+	else:
+		limit_date = datetime.today() + timedelta(-30)
+		if(result[1] > limit_date and email_id != "" and result[1] is not None and email_id == result[1] ):
+			return "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58"
+		else:
+			return result[0]
+		
 # def responsed_lead_count_by_company(account):
 # 	conn = connect()
 # 	cursor = conn.cursor()
