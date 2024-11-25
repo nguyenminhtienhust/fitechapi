@@ -1140,7 +1140,7 @@ def get_lead_assigned_user_by_account_and_email(name, email):
 		return ""
 	else:
 		limit_date = datetime.today() + timedelta(-30)
-		if(result[1] > limit_date and email_id != "" and result[2] is not None and email_id == result[2] ):
+		if(result[1] > limit_date and (email_id == "" or (email_id != "" and result[2] is not None and email_id == result[2] ))):
 			return "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58"
 		else:
 			return result[0]
