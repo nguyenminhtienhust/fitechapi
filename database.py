@@ -1348,101 +1348,112 @@ def edit_new_lead(access_token,lead_id,job_id,company_name,company_id,title,addr
 		json_object = data.json()
 
 def manual_work_lead(jobtitle,hirier,hiriertitle,company,joblink,hirierlink,companylink,address,email,phone,fromhirier) :
-    access_token = login_crm()
-    conn = connect()
-    cursor = conn.cursor()
-    company_info = get_account_by_name(company)
-    company_id = company_info["data"]
-    lead_info = get_item_by_name(jobtitle, company, hirier)
-    hirier_email = ""
-    request_note_str = ""
-    if(fromhirier):
-        hirier_email = email
-    if(hirier != ""):
-        contact_info = get_contact_by_name(hirier)
-        request_note_str = request_note_str + "\nconnect by Huong Nguyen" 
-        mess_sent = "message sent by AdminAccount"
-        if(contact_info["data"] == ""):
-            des = "connect by Huong Nguyen"
-            add_contact(access_token,hiriertitle, hirier, hirier_email, "", des, hirierlink, company_id)
-        else:
-            contact_id = contact_info["data"]
-            des = "connect by Huong Nguyen"
-            edit_contact(access_token, contact_id , hiriertitle, hirier_email, email, "", des, hirierlink, company_id)
-            
-    full_content = ""
-    if(email != ""):
+    try:
+        access_token = login_crm()
+        conn = connect()
+        cursor = conn.cursor()
+        company_info = get_account_by_name(company)
+        company_id = ""
+        contact_id = ""
+        if(company_info != ""):
+            company_id = company_info[0]
+        lead_info = get_item_by_name(jobtitle, company, hirier)
+        hirier_email = ""
+        request_note_str = ""
         if(fromhirier):
-            full_content = '\n Email được lấy từ trang cá nhân nhà tuyển dụng.'
+            hirier_email = email
+        if(hirier != ""):
+            contact_info = get_contact_by_name(hirier)
+            request_note_str = request_note_str + "\nconnect by Huong Nguyen" 
+            mess_sent = "message sent by AdminAccount"
+            if(contact_info == ""):
+                des = "connect by Huong Nguyen"
+                add_contact(access_token,hiriertitle, hirier, hirier_email, "", des, hirierlink, company_id)
+                contact_info = get_contact_by_name(hirier)
+                contact_id = contact_info[0]
+            else:
+                contact_id = contact_info[0]
+                des = "connect by Huong Nguyen"
+                edit_contact(access_token, contact_id , hiriertitle, hirier_email, email, "", des, hirierlink, company_id)
+        full_content = ""
+        if(email != ""):
+            if(fromhirier):
+                full_content = '\n Email được lấy từ trang cá nhân nhà tuyển dụng.'
+            else:
+                full_content = '\n Email được lấy từ job description.'
+        email_expired = get_email_exist(email)
+        lead_status_with_email = get_lead_status_with_email(email)
+        full_content = '\n Link tuyển dụng: '.join([full_content, joblink])
+        full_content = '\n Đã gửi connect request đến: '.join([full_content, hirierlink])
+        full_content = '\n Trang cá nhân nhà tuyển dụng: '.join([full_content, hirierlink])
+        message_company_sent = ""
+        message_sent_to_company = 0
+        lead_status = "New"
+        if(company_id == ""):
+            add_new_account(access_token,company,phone,companylink,address, message_company_sent)
+            company_info = get_account_by_name(company)
+            company_id = company_info[0]
         else:
-            full_content = '\n Email được lấy từ job description.'
+            message_company_sent = company_info[6]
+            edit_account(access_token,company_id,company_id,phone,companylink,address, message_company_sent)
+        if(company_info[6] is not None and "message" in company_info[6].lower()):
+            message_sent_to_company = 1
+        assigned_user_id = ""
+        if(hirier != ""):
+            assigned_user_id = get_lead_assigned_user_by_contact(hirier)
+        else:
+            assigned_user_id = get_lead_assigned_user_by_account_and_email(company,email)
+        if(message_company_sent != "" and assigned_user_id == ""):
+            assigned_user_id = "62b60dd0-9ab9-735e-e291-65d2cd0ab68e"
+        lead_id = ""
+        if(lead_info != ""):
+            lead_id = lead_info[0]
         
-    email_expired = get_email_exist(email)
-    lead_status_with_email = get_lead_status_with_email(email)
-    full_content = '\n Link tuyển dụng: '.join([full_content, joblink])
-    full_content = '\n Đã gửi connect request đến: '.join([full_content, hirierlink])
-    full_content = '\n Trang cá nhân nhà tuyển dụng: '.join([full_content, hirierlink])
-    message_company_sent = ""
-    message_sent_to_company = 0
-    if(company_id == ""):
-        add_new_account(access_token,company,phone,companylink,address, message_company_sent)
-    else:
-        message_company_sent = company_info["des"]
-        edit_account(access_token,company_id,company_id,phone,companylink,address, message_company_sent)
-    if(company_info["des"] is not None and "message" in company_info["des"].lower()):
-        message_sent_to_company = 1
-    assigned_user_id = ""
-    if(hirier != ""):
-        assigned_user_id = get_lead_assigned_user_by_contact(hirier)
-    else:
-        assigned_user_id = get_lead_assigned_user_by_account_and_email(company,email)
-    if(message_company_sent != "" and assigned_user_id == ""):
-        assigned_user_id = "62b60dd0-9ab9-735e-e291-65d2cd0ab68e"
-    lead_id = lead_info["data"]
-    if (lead_id == ""):
-        print("\n\nStarting add new:......\n\n")
-        time.sleep(2)
-        if(email_expired > 0):
-            assigned_user_id = "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58"
-            lead_status = "Recycled"
-            if(lead_status_with_email > 0):
-                lead_status = "Recycled"
-                if(assigned_user_id != "62b60dd0-9ab9-735e-e291-65d2cd0ab68e"):
-                    assigned_user_id = ""
-            if(request_note_str != ""):
-                assigned_user_id = "1"
-            if(lead_status == "New" and assigned_user_id == "1"):
-                assigned_user_id = ""
-            if(assigned_user_id == "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58"):
-                lead_status = "Recycled"
-        add_new_lead(access_token,"",company,company_id,jobtitle,address,"",phone,"",hirier_email,companylink,full_content,assigned_user_id, lead_status, "", hirier, "", contact_id, mess_sent)
-    else:
-        email_info = ""
-        if(lead_info["status"] == "Recycled" and lead_status == "Recycled"):
-            lead_status = "Recycled"
-        isEdit = 1
-        sMailInclude = 0
-        lead_email_list = check_email_lead(lead_id)
-        for lead_email in lead_email_list["email_list"]:
-            if(email_info == lead_email):
-                isMailInclude = 1
-                break
-        if(email_info == ""):
-            isMailInclude = 1
-        if(lead_info["phone_work"] == phone and lead_info["phone_mobile"] == phone and lead_info["phone_other"] == phone and isMailInclude == 1):
-            isEdit = 0
-        if(lead_info["status"] != "Assigned" and lead_info["status"] != "Converted" and lead_info["status"] != "In Process" and lead_info["status"] != "Dead" and lead_info["status"] != "Response" and isEdit == 1):	
-            if(lead_status == "New" and assigned_user_id == "1"):
-                assigned_user_id = ""
-            if(lead_info["assigned_user"] != ""):
-                assigned_user_id = lead_info["assigned_user"]
+        if (lead_id == ""):
+            print("\n\nStarting add new:......\n\n")
+            time.sleep(2)
             if(email_expired > 0):
                 assigned_user_id = "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58"
                 lead_status = "Recycled"
-            if(assigned_user_id == "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58"  or "sent" in lead_info["desc"]):
+                if(lead_status_with_email > 0):
+                    lead_status = "Recycled"
+                    if(assigned_user_id != "62b60dd0-9ab9-735e-e291-65d2cd0ab68e"):
+                        assigned_user_id = ""
+                if(request_note_str != ""):
+                    assigned_user_id = "1"
+                if(lead_status == "New" and assigned_user_id == "1"):
+                    assigned_user_id = ""
+                if(assigned_user_id == "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58"):
+                    lead_status = "Recycled"
+            add_new_lead(access_token,"",company,company_id,jobtitle,address,"",phone,"",hirier_email,companylink,full_content,assigned_user_id, lead_status, "", hirier, "", contact_id, mess_sent)
+        else:
+            email_info = ""
+            if(lead_info[39] == "Recycled" and lead_status == "Recycled"):
                 lead_status = "Recycled"
-            edit_new_lead(access_token,lead_id,"",company,company_id,jobtitle,address,"",phone,"",hirier_email,companylink,full_content, lead_status, "", assigned_user_id, hirier, "", contact_id, mess_sent)   
-# def responsed_lead_count_by_company(account):
-# 	conn = connect()
-# 	cursor = conn.cursor()
-# 	sql = ("SELECT count(*) from leads where deleted = 0 and first_name is Null and last_name = %s and status in ('Response', 'In Process', 'Converted')")
+            isEdit = 1
+            isMailInclude = 0
+            lead_email_list = check_email_lead(lead_id)
+            for lead_email in lead_email_list["email_list"]:
+                if(email_info == lead_email):
+                    isMailInclude = 1
+                    break
+            if(email_info == ""):
+                isMailInclude = 1
+            if(lead_info[17] == phone and lead_info[16] == phone and lead_info[18] == phone and isMailInclude == 1):
+                isEdit = 0
+            if(lead_info[39] != "Assigned" and lead_info[39] != "Converted" and lead_info[39] != "In Process" and lead_info[39] != "Dead" and lead_info[39] != "Response" and isEdit == 1):	
+                if(lead_status == "New" and assigned_user_id == "1"):
+                    assigned_user_id = ""
+                if(lead_info[7] != ""):
+                    assigned_user_id = lead_info[7]
+                if(email_expired > 0):
+                    assigned_user_id = "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58"
+                    lead_status = "Recycled"
+                if(assigned_user_id == "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58"  or "sent" in lead_info["desc"]):
+                    lead_status = "Recycled"
+                edit_new_lead(access_token,lead_id,"",company,company_id,jobtitle,address,"",phone,"",hirier_email,companylink,full_content, lead_status, "", assigned_user_id, hirier, "", contact_id, mess_sent) 
+        return 0
+    except Exception as error:
+        print("Error: ", error)
+        return -1
+        
