@@ -1421,6 +1421,7 @@ def manual_work_lead(jobtitle,hirier,hiriertitle,company,joblink,hirierlink,comp
                         assigned_user_id = ""
                 if(request_note_str != ""):
                     assigned_user_id = "1"
+                    lead_status = "Recycled"
                 if(lead_status == "New" and assigned_user_id == "1"):
                     assigned_user_id = ""
                 if(assigned_user_id == "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58"):
