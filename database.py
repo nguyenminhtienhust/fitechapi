@@ -1374,7 +1374,7 @@ def manual_work_lead(jobtitle,hirier,hiriertitle,company,joblink,hirierlink,comp
             else:
                 contact_id = contact_info[0]
                 des = "connect by Huong Nguyen"
-                edit_contact(access_token, contact_id , hiriertitle, hirier_email, email, "", des, hirierlink, company_id)
+                edit_contact(access_token, contact_id , hiriertitle,hirier, hirier_email, "", des, hirierlink, company_id)
         full_content = ""
         if(email != ""):
             if(fromhirier):
@@ -1395,7 +1395,7 @@ def manual_work_lead(jobtitle,hirier,hiriertitle,company,joblink,hirierlink,comp
             company_id = company_info[0]
         else:
             message_company_sent = company_info[6]
-            edit_account(access_token,company_id,company_id,phone,companylink,address, message_company_sent)
+            edit_account(access_token,company_id,company,phone,companylink,address, message_company_sent)
         if(company_info[6] is not None and "message" in company_info[6].lower()):
             message_sent_to_company = 1
         assigned_user_id = ""
