@@ -3,7 +3,7 @@ from database import connect
 from fastapi import HTTPException
 from database import get_item_by_name,find_minimum_leads_by_sale,get_all_dashboard,get_this_month_dashboard,get_today_dashboard,export_all_leads_in_Malaysia,get_leads_today,get_leads_yesterday,get_active_sales,assign_sale_with_lead
 from database import get_account_by_name, check_exist_email, check_email_lead, add_email_addressed, get_contact_by_name, get_contact_assigned_user, get_account_assigned_user, get_lead_assigned_user_by_contact, get_lead_assigned_user_by_account
-from database import get_lead_count, get_all_dashboard_by_date, get_email_exist, get_performance_report, get_meetings, get_lead_status_with_email, getMeeting_By_Date, get_lead_assigned_user_by_account_and_email
+from database import get_lead_count, get_all_dashboard_by_date, get_email_exist, get_performance_report, get_meetings, get_lead_status_with_email, getMeeting_By_Date, get_lead_assigned_user_by_account_and_email,manual_work_lead
 from pydantic import BaseModel
 from contextlib import asynccontextmanager
 #from psycopg_pool import AsyncConnectionPool
@@ -39,6 +39,18 @@ class ItemDashBoardByDate(BaseModel):
 class ItemTwoParams(BaseModel):
 	param_1 : str
 	param_2: str
+class NewLeadItem(BaseModel):
+	jobtitle : str
+	hirier: str
+	hiriertitle :str
+	company: str
+	joblink :str
+	hirierlink :str
+	companylink: str
+	address: str
+	email: str
+	phone: str
+	fromhirier :bool
 
 @app.get("/")
 def read_root():
@@ -236,4 +248,10 @@ async def get_lead_status(item : ItemName):
 @app.get("/getmeetingByDate")
 async def getMeeting_ByDate(item : ItemGetLeadCount):
 	data = getMeeting_By_Date(item.date_from, item.date_to, item.sale_id)
+	return data
+
+
+@app.get("/manualWorkLead")
+async def manual_WorkLead(item : NewLeadItem):
+	data = manual_work_lead(item.jobtitle, item.hirier,item.hiriertitle, item.company, item.joblink, item.hirierlink, item.companylink,item.address, item.email, item.phone, item.fromhirier)
 	return data
