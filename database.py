@@ -79,19 +79,19 @@ def get_leads_yesterday():
 	return {"data": results_today}
 
 def get_item_by_name(title, account, contact):
-	conn = connect()
-	cursor = conn.cursor()
-	sql = ("SELECT * FROM suitecrm.leads where title = %s and last_name = %s and first_name = %s and Deleted = 0")
-	if(contact == ""):
-		sql = ("SELECT * FROM suitecrm.leads where title = %s and last_name = %s and (first_name = %s or first_name is Null) and Deleted = 0")
-	cursor.execute(sql, (title,account, contact))
-	result = cursor.fetchone()
-	conn.close()
-	if result is None:
-		return ""
-	else:
-		#print(result)
-		return result
+    print("******* get_item_by_name *******")
+    conn = connect()
+    cursor = conn.cursor()
+    sql = ("SELECT * FROM suitecrm.leads where title = %s and last_name = %s and first_name = %s and Deleted = 0")
+    if(contact == ""):
+        sql = ("SELECT * FROM suitecrm.leads where title = %s and last_name = %s and (first_name = %s or first_name is Null) and Deleted = 0")
+    cursor.execute(sql, (title,account, contact))
+    result = cursor.fetchone()
+    conn.close()
+    if result is None:
+        return ""
+    else:
+        return result
 
 def get_active_sales():
 	conn = connect()
@@ -514,16 +514,17 @@ def get_today_dashboard():
 	return {"data":final_dict}
 	
 def get_account_by_name(name):
-	conn = connect()
-	cursor = conn.cursor()
-	sql = ("SELECT * FROM suitecrm.accounts where name = %s")
-	cursor.execute(sql, (name,))
-	result = cursor.fetchone()
-	conn.close()
-	if result is None:
-		return ""
-	else:
-		return result
+    print("******* get_account_by_name *******")
+    conn = connect()
+    cursor = conn.cursor()
+    sql = ("SELECT * FROM suitecrm.accounts where name = %s")
+    cursor.execute(sql, (name,))
+    result = cursor.fetchone()
+    conn.close()
+    if result is None:
+        return ""
+    else:
+        return result
 		
 def check_exist_email(name):
 	conn = connect()
@@ -548,6 +549,18 @@ def check_email_lead(lead_id):
 	for email in emails:
 		email_list.append(email[0])
 	return {"email_list" : email_list}
+
+def check_email_by_lead(lead_id):
+	conn = connect()
+	cursor = conn.cursor()
+	email_list = []
+	sql = ("SELECT email_address FROM suitecrm.email_addresses where id in (select email_address_id from suitecrm.email_addr_bean_rel where bean_id = %s)")
+	cursor.execute(sql,(lead_id,))
+	emails = cursor.fetchall()
+	conn.close()
+	for email in emails:
+		email_list.append(email[0])
+	return email_list
 
 def add_email_addressed(id, email, email_cap):
 	conn = connect()
@@ -837,7 +850,6 @@ def get_email_exist(email):
 	else:
 		query_date = datetime.today() + timedelta(-30)
 		query_date_string = query_date.strftime("%Y-%m-%d %H:%M:%S")
-		print(query_date_string)
 		sql = ("SELECT count(*) from suitecrm.leads where id in (SELECT bean_id from suitecrm.email_addr_bean_rel where email_address_id = %s) and date_entered > %s and assigned_user_id is not Null and assigned_user_id <> '' and deleted = 0 ")
 		cursor.execute(sql, (email_id[0],query_date_string,))
 		lead_count = cursor.fetchone()
@@ -1131,7 +1143,6 @@ def get_lead_assigned_user_by_account_and_email(name, email):
 	email_id = ""
 	if email_res is not None:
 		email_id = email_res[0]
-	print("email_id: ",email_id)
 	sql = ("SELECT l.assigned_user_id,l.date_entered, email.email_address_id FROM leads l left join email_addr_bean_rel email on l.id = email.bean_id where l.last_name = %s and assigned_user_id is not null and assigned_user_id <> '' and assigned_user_id <> 'd6ea87ac-8c7e-a4ed-ba81-65f500a98e58' and assigned_user_id <> '1' and assigned_user_id <> '62b60dd0-9ab9-735e-e291-65d2cd0ab68e' ORDER BY l.date_entered desc limit 1 ")
 	cursor.execute(sql,(name,))
 	result = cursor.fetchone()
@@ -1415,7 +1426,6 @@ def manual_work_lead(jobtitle,hirier,hiriertitle,company,joblink,hirierlink,comp
         lead_id = ""
         if(lead_info != ""):
             lead_id = lead_info[0]
-        
         if (lead_id == ""):
             print("\n\nStarting add new:......\n\n")
             time.sleep(2)
@@ -1435,19 +1445,21 @@ def manual_work_lead(jobtitle,hirier,hiriertitle,company,joblink,hirierlink,comp
                 lead_status = "Recycled"
             add_new_lead(access_token,"",company,company_id,jobtitle,address,"",phone,"",hirier_email,companylink,full_content,assigned_user_id, lead_status, "", hirier, "", contact_id, mess_sent)
         else:
+            print("\n\nStarting edit lead:......\n\n")
             email_info = ""
             if(lead_info[39] == "Recycled" and lead_status == "Recycled"):
                 lead_status = "Recycled"
             isEdit = 1
             isMailInclude = 0
-            lead_email_list = check_email_lead(lead_id)
-            for lead_email in lead_email_list["email_list"]:
-                if(email_info == lead_email):
-                    isMailInclude = 1
-                    break
-            if(email_info == ""):
+            lead_email_list = check_email_by_lead(lead_id)
+            if(len(lead_email_list) > 0):
+                for lead_email in lead_email_list:
+                    if(email == lead_email):
+                        isMailInclude = 1
+                        break
+            if(email == ""):
                 isMailInclude = 1
-            if(lead_info[17] == phone and lead_info[16] == phone and lead_info[18] == phone and isMailInclude == 1):
+            if(lead_info[17] is not None and lead_info[17] == phone and lead_info[16] is not None and lead_info[16] == phone and lead_info[18] is not None and lead_info[18] == phone and isMailInclude == 1):
                 isEdit = 0
             if(lead_info[39] != "Assigned" and lead_info[39] != "Converted" and lead_info[39] != "In Process" and lead_info[39] != "Dead" and lead_info[39] != "Response" and isEdit == 1):	
                 if(lead_status == "New" and assigned_user_id == "1"):
@@ -1457,9 +1469,9 @@ def manual_work_lead(jobtitle,hirier,hiriertitle,company,joblink,hirierlink,comp
                 if(email_expired > 0):
                     assigned_user_id = "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58"
                     lead_status = "Recycled"
-                if(assigned_user_id == "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58"  or "sent" in lead_info["desc"]):
+                if(assigned_user_id == "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58" or (lead_info[40] is not None and "sent" in lead_info[40])):
                     lead_status = "Recycled"
-                edit_new_lead(access_token,lead_id,"",company,company_id,jobtitle,address,"",phone,"",hirier_email,companylink,full_content, lead_status, "", assigned_user_id, hirier, "", contact_id, mess_sent) 
+                edit_new_lead(access_token,lead_id,"",company,company_id,jobtitle,address,"",phone,"",email,companylink,full_content, lead_status, "", assigned_user_id, hirier, "", contact_id, mess_sent) 
         return 0
     except Exception as error:
         print("Error: ", error)
