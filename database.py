@@ -1373,7 +1373,7 @@ def manual_work_lead(jobtitle,hirier,hiriertitle,company,joblink,hirierlink,comp
                 contact_id = contact_info[0]
             else:
                 contact_id = contact_info[0]
-                request_note_str = contact_info[5] + "\nconnect by Huong Nguyen" 
+                request_note_str = contact_info[5]
                 des = request_note_str
                 edit_contact(access_token, contact_id , hiriertitle,hirier, hirier_email, "", des, hirierlink, company_id)
         full_content = ""
@@ -1400,7 +1400,7 @@ def manual_work_lead(jobtitle,hirier,hiriertitle,company,joblink,hirierlink,comp
         else:
             message_company_sent = company_info[6]
             edit_account(access_token,company_id,company,phone,companylink,address, message_company_sent)
-        if(company_info[6] is not None and "message" in company_info[6].lower()):
+        if(company_info != "" and company_info[6] is not None and "message" in company_info[6].lower()):
             message_sent_to_company = 1
         assigned_user_id = ""
         if(hirier != ""):
@@ -1419,17 +1419,17 @@ def manual_work_lead(jobtitle,hirier,hiriertitle,company,joblink,hirierlink,comp
             if(email_expired > 0):
                 assigned_user_id = "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58"
                 lead_status = "Recycled"
-                if(lead_status_with_email > 0):
-                    lead_status = "Recycled"
-                    if(assigned_user_id != "62b60dd0-9ab9-735e-e291-65d2cd0ab68e"):
-                        assigned_user_id = ""
-                if(request_note_str != ""):
-                    assigned_user_id = "1"
-                    lead_status = "Recycled"
-                if(lead_status == "New" and assigned_user_id == "1"):
+            if(lead_status_with_email > 0):
+                lead_status = "Recycled"
+                if(assigned_user_id != "62b60dd0-9ab9-735e-e291-65d2cd0ab68e"):
                     assigned_user_id = ""
-                if(assigned_user_id == "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58"):
-                    lead_status = "Recycled"
+            if(request_note_str != ""):
+                assigned_user_id = "1"
+                lead_status = "Recycled"
+            if(lead_status == "New" and assigned_user_id == "1"):
+                assigned_user_id = ""
+            if(assigned_user_id == "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58"):
+                lead_status = "Recycled"
             add_new_lead(access_token,"",company,company_id,jobtitle,address,"",phone,"",hirier_email,companylink,full_content,assigned_user_id, lead_status, "", hirier, "", contact_id, mess_sent)
         else:
             email_info = ""
@@ -1457,7 +1457,7 @@ def manual_work_lead(jobtitle,hirier,hiriertitle,company,joblink,hirierlink,comp
                 if(assigned_user_id == "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58"  or "sent" in lead_info["desc"]):
                     lead_status = "Recycled"
                 edit_new_lead(access_token,lead_id,"",company,company_id,jobtitle,address,"",phone,"",hirier_email,companylink,full_content, lead_status, "", assigned_user_id, hirier, "", contact_id, mess_sent) 
-        return request_note_str
+        return 0
     except Exception as error:
         print("Error: ", error)
         return -1
