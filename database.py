@@ -1364,7 +1364,7 @@ def manual_work_lead(jobtitle,hirier,hiriertitle,company,joblink,hirierlink,comp
             hirier_email = email
         if(hirier != ""):
             contact_info = get_contact_by_name(hirier)
-            request_note_str = request_note_str + "\nconnect by Huong Nguyen" 
+            request_note_str = "connect by Huong Nguyen" 
             mess_sent = "message sent by AdminAccount"
             if(contact_info == ""):
                 des = "connect by Huong Nguyen"
@@ -1373,7 +1373,8 @@ def manual_work_lead(jobtitle,hirier,hiriertitle,company,joblink,hirierlink,comp
                 contact_id = contact_info[0]
             else:
                 contact_id = contact_info[0]
-                des = "connect by Huong Nguyen"
+                request_note_str = contact_info[5] + "\nconnect by Huong Nguyen" 
+                des = request_note_str
                 edit_contact(access_token, contact_id , hiriertitle,hirier, hirier_email, "", des, hirierlink, company_id)
         full_content = ""
         if(email != ""):
@@ -1382,10 +1383,13 @@ def manual_work_lead(jobtitle,hirier,hiriertitle,company,joblink,hirierlink,comp
             else:
                 full_content = '\n Email được lấy từ job description.'
         email_expired = get_email_exist(email)
-        lead_status_with_email = get_lead_status_with_email(email)
-        full_content = '\n Link tuyển dụng: '.join([full_content, joblink])
-        full_content = '\n Đã gửi connect request đến: '.join([full_content, hirierlink])
-        full_content = '\n Trang cá nhân nhà tuyển dụng: '.join([full_content, hirierlink])
+        lead_status_with_email = get_lead_status_with_email(email) 
+        if(joblink != ""):
+            full_content = '\n Link tuyển dụng: '.join([full_content, joblink])
+        if(hirierlink != ""):
+            full_content = '\n Đã gửi connect request đến: '.join([full_content, hirierlink])
+        if(hirierlink != ""):
+            full_content = '\n Trang cá nhân nhà tuyển dụng: '.join([full_content, hirierlink])
         message_company_sent = ""
         message_sent_to_company = 0
         lead_status = "New"
@@ -1453,7 +1457,7 @@ def manual_work_lead(jobtitle,hirier,hiriertitle,company,joblink,hirierlink,comp
                 if(assigned_user_id == "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58"  or "sent" in lead_info["desc"]):
                     lead_status = "Recycled"
                 edit_new_lead(access_token,lead_id,"",company,company_id,jobtitle,address,"",phone,"",hirier_email,companylink,full_content, lead_status, "", assigned_user_id, hirier, "", contact_id, mess_sent) 
-        return 0
+        return request_note_str
     except Exception as error:
         print("Error: ", error)
         return -1
