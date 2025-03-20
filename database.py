@@ -1384,7 +1384,9 @@ def manual_work_lead(jobtitle,hirier,hiriertitle,company,joblink,hirierlink,comp
             else:
                 full_content = '\n Email được lấy từ job description.'
         email_expired = get_email_exist(email)
-        lead_status_with_email = get_lead_status_with_email(email) 
+        lead_status_with_email = get_lead_status_with_email(email)
+        if(companylink != ""):
+            full_content = '\n Trang giới thiệu: '.join([full_content,companylink])         
         if(joblink != ""):
             full_content = '\n Link tuyển dụng: '.join([full_content, joblink])
         if(hirierlink != ""):
