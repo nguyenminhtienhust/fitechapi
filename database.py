@@ -1360,6 +1360,7 @@ def manual_work_lead(jobtitle,hirier,hiriertitle,company,joblink,hirierlink,comp
         lead_info = get_item_by_name(jobtitle, company, hirier)
         hirier_email = ""
         request_note_str = ""
+        mess_sent = ""
         if(fromhirier):
             hirier_email = email
         if(hirier != ""):
