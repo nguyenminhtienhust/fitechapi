@@ -1444,7 +1444,7 @@ def manual_work_lead(jobtitle,hirier,hiriertitle,company,joblink,hirierlink,comp
                 assigned_user_id = ""
             if(assigned_user_id == "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58"):
                 lead_status = "Recycled"
-            add_new_lead(access_token,"",company,company_id,jobtitle,address,otheraddress,phone,"",hirier_email,companylink,full_content,assigned_user_id, lead_status, "", hirier, "", contact_id, mess_sent)
+            add_new_lead(access_token,"",company,company_id,jobtitle,address,otheraddress,phone,"",email,companysite,full_content,assigned_user_id, lead_status, "", hirier, "", contact_id, mess_sent)
             result = 1
         else:
             print("\n\nStarting edit lead:......\n\n")
@@ -1473,7 +1473,7 @@ def manual_work_lead(jobtitle,hirier,hiriertitle,company,joblink,hirierlink,comp
                     lead_status = "Recycled"
                 if(assigned_user_id == "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58" or (lead_info[40] is not None and "sent" in lead_info[40])):
                     lead_status = "Recycled"
-                edit_new_lead(access_token,lead_id,"",company,company_id,jobtitle,address,otheraddress,phone,"",email,companylink,full_content, lead_status, "", assigned_user_id, hirier, "", contact_id, mess_sent) 
+                edit_new_lead(access_token,lead_id,"",company,company_id,jobtitle,address,otheraddress,phone,"",email,companysite,full_content, lead_status, "", assigned_user_id, hirier, "", contact_id, mess_sent) 
                 result = 2
         return result
     except Exception as error:
