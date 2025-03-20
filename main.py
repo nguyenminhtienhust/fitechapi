@@ -47,7 +47,9 @@ class NewLeadItem(BaseModel):
 	joblink :str
 	hirierlink :str
 	companylink: str
+	companysite: str
 	address: str
+	otheraddress: str
 	email: str
 	phone: str
 	fromhirier :bool
@@ -253,5 +255,5 @@ async def getMeeting_ByDate(item : ItemGetLeadCount):
 
 @app.get("/manualWorkLead")
 async def manual_WorkLead(item : NewLeadItem):
-	data = manual_work_lead(item.jobtitle, item.hirier,item.hiriertitle, item.company, item.joblink, item.hirierlink, item.companylink,item.address, item.email, item.phone, item.fromhirier)
+	data = manual_work_lead(item.jobtitle, item.hirier,item.hiriertitle, item.company, item.joblink, item.hirierlink, item.companylink,item.address, item.email, item.phone, item.fromhirier, item.companysite, item.otheraddress)
 	return data
