@@ -1366,6 +1366,7 @@ def manual_work_lead(jobtitle,hirier,hiriertitle,company,joblink,hirierlink,comp
         company_info = get_account_by_name(company)
         company_id = ""
         contact_id = ""
+        result = 0
         if(company_info != ""):
             company_id = company_info[0]
         lead_info = get_item_by_name(jobtitle, company, hirier)
@@ -1444,6 +1445,7 @@ def manual_work_lead(jobtitle,hirier,hiriertitle,company,joblink,hirierlink,comp
             if(assigned_user_id == "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58"):
                 lead_status = "Recycled"
             add_new_lead(access_token,"",company,company_id,jobtitle,address,"",phone,"",hirier_email,companylink,full_content,assigned_user_id, lead_status, "", hirier, "", contact_id, mess_sent)
+            result = 1
         else:
             print("\n\nStarting edit lead:......\n\n")
             email_info = ""
@@ -1472,7 +1474,8 @@ def manual_work_lead(jobtitle,hirier,hiriertitle,company,joblink,hirierlink,comp
                 if(assigned_user_id == "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58" or (lead_info[40] is not None and "sent" in lead_info[40])):
                     lead_status = "Recycled"
                 edit_new_lead(access_token,lead_id,"",company,company_id,jobtitle,address,"",phone,"",email,companylink,full_content, lead_status, "", assigned_user_id, hirier, "", contact_id, mess_sent) 
-        return 0
+                result = 2
+        return result
     except Exception as error:
         print("Error: ", error)
         return -1
