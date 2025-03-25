@@ -1146,12 +1146,16 @@ def get_lead_assigned_user_by_account_and_email(name, email):
 	sql = ("SELECT l.assigned_user_id,l.date_entered, email.email_address_id FROM leads l left join email_addr_bean_rel email on l.id = email.bean_id where l.last_name = %s and assigned_user_id is not null and assigned_user_id <> '' and assigned_user_id <> 'd6ea87ac-8c7e-a4ed-ba81-65f500a98e58' and assigned_user_id <> '1' and assigned_user_id <> '62b60dd0-9ab9-735e-e291-65d2cd0ab68e' ORDER BY l.date_entered desc limit 1 ")
 	cursor.execute(sql,(name,))
 	result = cursor.fetchone()
+	sql_get_status = ("SELECT count(1) from leads where last_name = %s and status in ('Response', 'In Process','Converted')")
+	cursor.execute(sql_get_status,(name,))
+	status_count_fetch = cursor.fetchone()
+	status_count = status_count_fetch[0]
 	conn.close()
 	if result is None:
 		return ""
 	else:
 		limit_date = datetime.today() + timedelta(-30)
-		if(result[1] > limit_date and (email_id == "" or (email_id != "" and result[2] is not None and email_id == result[2] ))):
+		if(status_count > 0 and result[1] > limit_date and (email_id == "" or (email_id != "" and result[2] is not None and email_id == result[2] ))):
 			return "d6ea87ac-8c7e-a4ed-ba81-65f500a98e58"
 		else:
 			return result[0]
