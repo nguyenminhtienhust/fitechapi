@@ -2,7 +2,7 @@
 import mysql.connector
 from dotenv import load_dotenv
 import os
-from datetime import datetime, timedelta, timezone, date
+from datetime import datetime, timedelta, timezone, date, time
 import calendar
 import requests
 import time
@@ -1490,3 +1490,21 @@ def manual_work_lead(jobtitle,hirier,hiriertitle,company,joblink,hirierlink,comp
         print("Error: ", error)
         return -1
         
+            
+def get_account_message_today():
+    print("******* get_account_message_today *******")
+    conn = connect()
+    cursor = conn.cursor()
+    first_date = datetime.now()
+    start_of_day = datetime.combine(first_date, datetime.strptime('000000','%H%M%S').time())
+    print(start_of_day)
+    end_of_day = datetime.combine(first_date, datetime.strptime('235959','%H%M%S').time())
+    print(end_of_day)
+    sql = ("SELECT count(*) FROM suitecrm.accounts where date_entered >=%s and date_entered<= %s and description like '%message%' and created_by in ('1','62b60dd0-9ab9-735e-e291-65d2cd0ab68e')")
+    cursor.execute(sql, (start_of_day,end_of_day))
+    result = cursor.fetchone()
+    conn.close()
+    if result is None:
+        return 0
+    else:
+        return result[0]
