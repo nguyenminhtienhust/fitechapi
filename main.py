@@ -262,4 +262,4 @@ async def manual_WorkLead(item : NewLeadItem):
 @app.get("/getAccountSentMessageToday")
 async def get_accountMessageToday():
     data = get_account_message_today()
-    return data
+    return {"data" : data }
