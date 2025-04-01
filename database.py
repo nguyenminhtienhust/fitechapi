@@ -517,7 +517,7 @@ def get_account_by_name(name):
     print("******* get_account_by_name *******")
     conn = connect()
     cursor = conn.cursor()
-    sql = ("SELECT * FROM suitecrm.accounts where name = %s")
+    sql = ("SELECT * FROM suitecrm.accounts where name = %s and created_by in ('1','62b60dd0-9ab9-735e-e291-65d2cd0ab68e') ")
     cursor.execute(sql, (name,))
     result = cursor.fetchone()
     conn.close()
