@@ -230,7 +230,7 @@ def get_all_dashboard():
 	cursor.execute(admin_mess_sent_count,())
 	total_mess_sent_lead_admin = cursor.fetchone()
 	final_dict["total_mess_sent_lead_admin"] = total_mess_sent_lead_admin[0] 
-	admin_res_count = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0 and (status_description LIKE '%yes%' or status = 'Response')" )
+	admin_res_count = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0 and (status_description LIKE '%yes%' or status in ('Response','In Process','Converted'))" )
 	cursor.execute(admin_res_count,())
 	total_mess_res_lead_admin = cursor.fetchone()
 	final_dict["total_mess_res_lead_admin"] = total_mess_res_lead_admin[0] 
@@ -377,7 +377,7 @@ def get_this_month_dashboard():
 	cursor.execute(admin_mess_sent_count,(first_date_string,last_date_string))
 	total_mess_sent_lead_admin = cursor.fetchone()
 	final_dict["total_mess_sent_lead_admin"] = total_mess_sent_lead_admin[0] 
-	admin_res_count = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0 and date_modified >= %s and date_modified < %s and (status_description LIKE '%yes%' or status = 'Response')" )
+	admin_res_count = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0 and date_modified >= %s and date_modified < %s and (status_description LIKE '%yes%' or status in ('Response','In Process','Converted'))" )
 	cursor.execute(admin_res_count,(first_date_string,last_date_string))
 	total_mess_res_lead_admin = cursor.fetchone()
 	final_dict["total_mess_res_lead_admin"] = total_mess_res_lead_admin[0] 
@@ -748,7 +748,7 @@ def get_all_dashboard_by_date(date_from, date_to):
 	cursor.execute(admin_mess_sent_count,(date_from, date_to))
 	total_mess_sent_lead_admin = cursor.fetchone()
 	final_dict["total_mess_sent_lead_admin"] = total_mess_sent_lead_admin[0] 
-	admin_res_count = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0 and date_modified >= %s and date_modified < %s and (status_description LIKE '%yes%' or status = 'Response')" )
+	admin_res_count = ("select count(*) from suitecrm.leads where created_by = '1' and deleted = 0 and date_modified >= %s and date_modified < %s and (status_description LIKE '%yes%' or status in ('Response','In Process', 'Converted'))" )
 	cursor.execute(admin_res_count,(date_from, date_to))
 	total_mess_res_lead_admin = cursor.fetchone()
 	final_dict["total_mess_res_lead_admin"] = total_mess_res_lead_admin[0] 
@@ -888,7 +888,7 @@ def get_performance_report(saleMember, input_year):
 			total_leads = cursor.fetchone()
 			detail_dict["total_lead"] = total_leads[0]
 			detail_dict["total_leads_assigned"] = total_leads[0]
-			sql_total_contact = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered < %s and (status_description LIKE '%AdminAccount%' or status in ('Assigned', 'Response','In Process','Converted') )" + where_sql
+			sql_total_contact = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered < %s and (status_description LIKE '%AdminAccount%' or status in ('Assigned', 'Response','In Process','Converted','Dead') )" + where_sql
 			cursor.execute(sql_total_contact,(first_date_string,last_date_string,saleMember))
 			total_leads_contact = cursor.fetchone()
 			detail_dict["total_lead_contact"] = total_leads_contact[0]
@@ -897,7 +897,7 @@ def get_performance_report(saleMember, input_year):
 			else:
 				detail_dict["contact_rate"] = 'NaN'
 			detail_dict["assigned_rate"] = detail_dict["contact_rate"]
-			sql_replied_count = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered < %s and (status in ('Response','In Process','Converted') or status_description LIKE '%yes%' )" + where_sql
+			sql_replied_count = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered < %s and (status in ('Response','In Process','Converted','Dead') or status_description LIKE '%yes%' )" + where_sql
 			cursor.execute(sql_replied_count,(first_date_string,last_date_string,saleMember))
 			total_replied_contact = cursor.fetchone()
 			detail_dict["total_replied_contact"] = total_replied_contact[0]
@@ -953,7 +953,7 @@ def get_performance_report(saleMember, input_year):
 				detail_dict["assigned_rate"] = round((detail_dict["total_leads_assigned"]/detail_dict["total_lead"])*100,3)
 			else:
 				detail_dict["assigned_rate"] = 'NaN'
-			sql_total_contact = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered < %s and (status_description LIKE '%AdminAccount%' or status in ('Assigned', 'Response','In Process','Converted') )"
+			sql_total_contact = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered < %s and (status_description LIKE '%AdminAccount%' or status in ('Assigned', 'Response','In Process','Converted') or (status = 'Dead' and assigned_user_id is not null and assigned_user_id <> '' and assigned_user_id not in ('1','62b60dd0-9ab9-735e-e291-65d2cd0ab68e','d6ea87ac-8c7e-a4ed-ba81-65f500a98e58')) )"
 			cursor.execute(sql_total_contact,(first_date_string,last_date_string))
 			total_leads_contact = cursor.fetchone()
 			detail_dict["total_lead_contact"] = total_leads_contact[0]
@@ -961,7 +961,7 @@ def get_performance_report(saleMember, input_year):
 				detail_dict["contact_rate"] = round((detail_dict["total_lead_contact"]/detail_dict["total_leads_assigned"])*100,3)
 			else:
 				detail_dict["contact_rate"] = 'NaN'
-			sql_replied_count = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered < %s and (status in ('Response','In Process','Converted') or status_description LIKE '%yes%' )" 
+			sql_replied_count = "Select count(*) from leads where deleted = 0 and date_entered >= %s and date_entered < %s and (status in ('Response','In Process','Converted') or status_description LIKE '%yes%' or (status = 'Dead' and assigned_user_id is not null and assigned_user_id <> '' and  assigned_user_id not in ('1','62b60dd0-9ab9-735e-e291-65d2cd0ab68e','d6ea87ac-8c7e-a4ed-ba81-65f500a98e58')) )" 
 			cursor.execute(sql_replied_count,(first_date_string,last_date_string))
 			total_replied_contact = cursor.fetchone()
 			detail_dict["total_replied_contact"] = total_replied_contact[0]
