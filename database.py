@@ -1508,3 +1508,16 @@ def get_account_message_today():
         return 0
     else:
         return result[0]
+
+def get_lead_count_by_company(company_name):
+	print("******* get_lead_count_by_company *******")
+	conn = connect()
+    cursor = conn.cursor()
+	sql = ("SELECT count(*) from suitecrm.leads where last_name = %s")
+	cursor.execute(sql, company_name)
+	result = cursor.fetchone()
+	conn.close()
+	if result is None:
+        return 0
+    else:
+        return result[0]

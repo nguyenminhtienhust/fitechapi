@@ -263,3 +263,9 @@ async def manual_WorkLead(item : NewLeadItem):
 async def get_accountMessageToday():
     data = get_account_message_today()
     return {"data" : data }
+
+
+@app.get("/getLeadCountByCompany")
+async def get_leadCountByCompany():
+    data = get_lead_count_by_company()
+    return {"data" : data }
