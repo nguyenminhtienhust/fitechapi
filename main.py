@@ -266,6 +266,6 @@ async def get_accountMessageToday():
 
 
 @app.get("/getLeadCountByCompany")
-async def get_leadCountByCompany():
-    data = get_lead_count_by_company()
+async def get_leadCountByCompany(item : ItemName):
+    data = get_lead_count_by_company(item.name)
     return {"data" : data }
