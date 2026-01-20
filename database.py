@@ -1511,13 +1511,35 @@ def get_account_message_today():
 
 def get_lead_count_by_company(company_name):
 	print("******* get_lead_count_by_company *******")
+	print("------company_name------",company_name)
 	conn = connect()
 	cursor = conn.cursor()
 	sql = ("SELECT count(*) from suitecrm.leads where last_name = %s")
-	cursor.execute(sql, company_name)
+	cursor.execute(sql, (company_name,))
 	result = cursor.fetchone()
-	conn.close()
+	lead_count = 0
 	if result is None:
-		return 0
+		lead_count = 0
 	else:
-		return result[0]
+		lead_count = result[0]
+	if lead_count == 0:
+		conn.close()
+		return lead_count
+	else:
+		sql = ("SELECT MAX(date_entered) from leads where last_name = %s")
+		cursor.execute(sql, (company_name,))
+		result = cursor.fetchone()
+		max_date = result[0]
+		# print("max_date:",max_date)
+		max_date_without_time = max_date.date()
+		# print("max_date_without_time:",max_date_without_time)
+		today = date.today()
+		one_year_ago_date = date(today.year - 1, today.month, today.day)
+		# print("one_year_ago_date:",one_year_ago_date)
+		if   max_date_without_time < one_year_ago_date:
+			lead_count = 0
+		# print("lead_count:",lead_count)
+		conn.close()
+		return lead_count
+		# if max_date.year == today.year - 1:
+			
