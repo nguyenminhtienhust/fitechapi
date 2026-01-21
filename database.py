@@ -1514,7 +1514,7 @@ def get_lead_count_by_company(company_name):
 	print("------company_name------",company_name)
 	conn = connect()
 	cursor = conn.cursor()
-	sql = ("SELECT count(*) from suitecrm.leads where last_name = %s")
+	sql = ("SELECT count(*) from suitecrm.leads where last_name = %s and assigned_user_id <> '' and assigned_user_id not in ('1','62b60dd0-9ab9-735e-e291-65d2cd0ab68e','d6ea87ac-8c7e-a4ed-ba81-65f500a98e58')")
 	cursor.execute(sql, (company_name,))
 	result = cursor.fetchone()
 	lead_count = 0
@@ -1526,7 +1526,7 @@ def get_lead_count_by_company(company_name):
 		conn.close()
 		return lead_count
 	else:
-		sql = ("SELECT MAX(date_entered) from leads where last_name = %s")
+		sql = ("SELECT MAX(date_entered) from leads where last_name = %s and assigned_user_id <> '' and assigned_user_id not in ('1','62b60dd0-9ab9-735e-e291-65d2cd0ab68e','d6ea87ac-8c7e-a4ed-ba81-65f500a98e58')")
 		cursor.execute(sql, (company_name,))
 		result = cursor.fetchone()
 		max_date = result[0]
